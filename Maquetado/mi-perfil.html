@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mi perfil de usuario · NutriZoo LT</title>
+<link rel="stylesheet" href="assets/css/estilos.css">
+</head>
+<body data-pantalla="mi-perfil" data-requiere-sesion>
+<div class="app-layout">
+  <aside class="sidebar" id="sidebar" aria-label="Menú lateral"></aside>
+  <div class="velo" aria-hidden="true"></div>
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar-izq">
+        <button type="button" class="hamburguesa" aria-label="Abrir menú" aria-expanded="false">☰</button>
+        <div class="tit">
+          <h1>Mi perfil de usuario</h1>
+          <p>Datos personales y acceso de la cuenta en sesión</p>
+        </div>
+      </div>
+      <div class="usuario">
+        <div class="avatar" id="usuario-iniciales">—</div>
+        <div class="datos">
+          <strong id="usuario-nombre">—</strong>
+          <span id="usuario-rol">—</span>
+        </div>
+        <a href="#" class="salir" id="cerrar-sesion">Cerrar sesión</a>
+      </div>
+    </header>
+
+    <main class="contenido">
+
+      <div class="card">
+        <h3>Datos personales de la cuenta</h3>
+        <div class="dos">
+          <div class="campo"><label>Nombre completo</label><input id="perfil-nombre" readonly type="text" value="—"/></div>
+          <div class="campo"><label>Usuario</label><input id="perfil-usuario" readonly type="text" value="—"/></div>
+          <div class="campo"><label>Rol</label><input id="perfil-rol" readonly type="text" value="—"/></div>
+          <div class="campo"><label>Identificador de persona (id_persona)</label><input id="perfil-id" readonly type="text" value="—"/></div>
+          <div class="campo"><label>Puesto</label><input id="perfil-puesto" readonly type="text" value="—"/></div>
+          <div class="campo"><label>Correo electrónico</label><input id="perfil-correo" readonly type="text" value="—"/></div>
+          <div class="campo"><label>Teléfono</label><input id="perfil-telefono" readonly type="text" value="—"/></div>
+          <div class="campo"><label>Último acceso</label><input id="perfil-ultimo-acceso" readonly type="text" value="—"/></div>
+        </div>
+
+        <div class="acciones">
+          <a class="btn2" href="cambiar-password.html">Cambiar de Password</a>
+          <a class="btn-contorno" href="inicio.html">Volver al panel</a>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+<script src="assets/js/app.js"></script>
+</body>
+</html>
