@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>1.1 Roles y accesos · NutriZoo LT</title>
+<link href="assets/css/estilos.css" rel="stylesheet"/>
+</head>
+<body data-modulo="1" data-pantalla="roles-accesos" data-requiere-sesion="">
+<div class="app-layout">
+<aside aria-label="Menú lateral" class="sidebar" id="sidebar"></aside>
+<div aria-hidden="true" class="velo"></div>
+<div class="main">
+<header class="topbar">
+<div class="topbar-izq">
+<button aria-expanded="false" aria-label="Abrir menú" class="hamburguesa" type="button">☰</button>
+<div class="tit">
+<h1>1.1 Roles y accesos</h1>
+<p>Grupos de usuarios y permisos por módulo</p>
+</div>
+</div>
+<div class="usuario">
+<div class="avatar" id="usuario-iniciales">—</div>
+<div class="datos">
+<strong id="usuario-nombre">—</strong>
+<span id="usuario-rol">—</span>
+</div>
+<a class="salir" href="#" id="cerrar-sesion">Cerrar sesión</a>
+</div>
+</header>
+<main class="contenido">
+
+<div class="card">
+<div class="roles-cabecera">
+<div class="campo">
+<label for="rol-selector">Rol a modificar</label>
+<select id="rol-selector"><option value="">Seleccione un rol</option></select>
+</div>
+<div class="campo">
+<label for="rol-clave">Clave del rol</label>
+<input autocomplete="off" id="rol-clave" maxlength="30" readonly spellcheck="false" type="text"/>
+</div>
+<div class="campo">
+<label for="rol-nombre">Nombre del rol</label>
+<input id="rol-nombre" maxlength="60" readonly type="text"/>
+</div>
+<div class="campo">
+<label for="rol-descripcion">Descripción</label>
+<input id="rol-descripcion" maxlength="140" readonly type="text"/>
+</div>
+</div>
+
+<div class="roles-cuerpo">
+<div class="roles-listas">
+
+<div class="traslado">
+<div class="traslado-lista">
+<h4>USUARIO(S)/GRUPO(S)</h4>
+<select id="usuarios-disponibles" multiple size="8"></select>
+</div>
+<div class="traslado-botones">
+<button class="btn-traslado" data-dir="1" data-lista="usuarios" data-todo="0" title="Mover la selección a la derecha" type="button">&gt;</button>
+<button class="btn-traslado" data-dir="1" data-lista="usuarios" data-todo="1" title="Mover todos a la derecha" type="button">&gt;&gt;</button>
+<button class="btn-traslado" data-dir="-1" data-lista="usuarios" data-todo="0" title="Mover la selección a la izquierda" type="button">&lt;</button>
+<button class="btn-traslado" data-dir="-1" data-lista="usuarios" data-todo="1" title="Mover todos a la izquierda" type="button">&lt;&lt;</button>
+</div>
+<div class="traslado-lista">
+<h4>USUARIO SELECC.</h4>
+<select id="usuarios-asignados" multiple size="8"></select>
+</div>
+</div>
+
+<div class="traslado">
+<div class="traslado-lista">
+<h4>ACCESOS</h4>
+<select id="accesos-disponibles" multiple size="8"></select>
+</div>
+<div class="traslado-botones">
+<button class="btn-traslado" data-dir="1" data-lista="accesos" data-todo="0" title="Mover la selección a la derecha" type="button">&gt;</button>
+<button class="btn-traslado" data-dir="1" data-lista="accesos" data-todo="1" title="Mover todos a la derecha" type="button">&gt;&gt;</button>
+<button class="btn-traslado" data-dir="-1" data-lista="accesos" data-todo="0" title="Mover la selección a la izquierda" type="button">&lt;</button>
+<button class="btn-traslado" data-dir="-1" data-lista="accesos" data-todo="1" title="Mover todos a la izquierda" type="button">&lt;&lt;</button>
+</div>
+<div class="traslado-lista">
+<h4>ACCESO ASIGN.</h4>
+<select id="accesos-asignados" multiple size="8"></select>
+</div>
+</div>
+
+</div>
+
+<aside class="tareas" aria-label="Tareas">
+<h4>Tareas</h4>
+<button class="btn2 btn-tarea" data-real id="t-nuevo" type="button">Nuevo</button>
+<button class="btn2 btn-tarea btn-tarea-rojo" data-real id="t-borrar" type="button">Borrar</button>
+<button class="btn2 btn-tarea" data-real id="t-modif" type="button">Modif</button>
+<button class="btn2 btn-tarea" data-real id="t-consul" type="button">Consul</button>
+<button class="btn-gris btn-tarea" data-real id="t-cancel" type="button">Cancel</button>
+<button class="btn-gris btn-tarea" data-real id="t-salir" type="button">Salir</button>
+</aside>
+</div>
+
+<div class="msj" id="roles-msg" role="alert" hidden></div>
+</div>
+
+</main>
+</div>
+</div>
+<script src="assets/js/app.js"></script>
+</body>
+</html>

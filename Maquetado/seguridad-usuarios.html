@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>1.3 Control de usuarios y permisos · NutriZoo LT</title>
+<link href="assets/css/estilos.css" rel="stylesheet"/>
+</head>
+<body data-modulo="1" data-pantalla="seguridad-usuarios" data-requiere-sesion="">
+<div class="app-layout">
+<aside aria-label="Menú lateral" class="sidebar" id="sidebar"></aside>
+<div aria-hidden="true" class="velo"></div>
+<div class="main">
+<header class="topbar">
+<div class="topbar-izq">
+<button aria-expanded="false" aria-label="Abrir menú" class="hamburguesa" type="button">☰</button>
+<div class="tit">
+<h1>1.3 Control de usuarios y permisos</h1>
+<p>Control de accesos del sistema</p>
+</div>
+</div>
+<div class="usuario">
+<div class="avatar" id="usuario-iniciales">—</div>
+<div class="datos">
+<strong id="usuario-nombre">—</strong>
+<span id="usuario-rol">—</span>
+</div>
+<a class="salir" href="#" id="cerrar-sesion">Cerrar sesión</a>
+</div>
+</header>
+<main class="contenido">
+
+<div data-ventana="usuarios" data-ventana-defecto id="usuarios">
+<div class="cuenta-grid">
+<section class="card panel-cuenta">
+<h3>DATOS DE LA CUENTA DE USUARIO</h3>
+<div class="dos">
+<div class="campo"><label for="cuenta-persona">NAME USER <span class="req">*</span></label>
+<div class="campo-con-icono">
+<select id="cuenta-persona"><option value="">Seleccione el nombre de la persona</option></select>
+<button aria-label="Alta de persona" class="icono-campo" id="cuenta-alta-persona" title="Alta de persona" type="button">✚</button>
+</div>
+</div>
+<div class="campo"><label for="cuenta-login">LOGIN <span class="req">*</span></label><input autocomplete="off" id="cuenta-login" spellcheck="false" type="text"/></div>
+<div class="campo"><label for="cuenta-password">PASSWORD <span class="req">*</span></label>
+<div class="campo-clave">
+<input autocomplete="new-password" id="cuenta-password" type="password"/>
+<button aria-label="Mostrar contraseña" aria-pressed="false" class="ver-clave" id="cuenta-ver" type="button">Ver</button>
+</div>
+</div>
+<div class="campo"><label for="cuenta-fini">FECHA DE INICIO</label><input id="cuenta-fini" type="date"/></div>
+<div class="campo"><label for="cuenta-ffin">FECHA DE TÉRMINO</label><input id="cuenta-ffin" type="date"/></div>
+<div class="campo campo-check"><label for="cuenta-estado">EDO. DE LA CUENTA</label><input id="cuenta-estado" type="checkbox"/></div>
+</div>
+
+<div class="alta-persona" hidden id="persona-alta">
+<div class="dos">
+<div class="campo"><label for="persona-nombres">Nombres</label><input id="persona-nombres" type="text"/></div>
+<div class="campo"><label for="persona-apellidos">Apellidos</label><input id="persona-apellidos" type="text"/></div>
+<div class="campo"><label for="persona-puesto">Puesto</label><input id="persona-puesto" type="text"/></div>
+<div class="campo"><label for="persona-correo">Correo electrónico</label><input id="persona-correo" type="email"/></div>
+<div class="campo"><label for="persona-telefono">Teléfono</label><input id="persona-telefono" type="tel"/></div>
+</div>
+<div class="acciones">
+<button class="btn2" data-real id="persona-agregar" type="button">Agregar persona</button>
+<button class="btn-gris" data-real id="persona-cancelar" type="button">Cancelar</button>
+</div>
+</div>
+
+<p class="campo-error" id="cuenta-error" role="alert" hidden></p>
+</section>
+
+<aside class="card panel-opciones">
+<h3>OPCIONES</h3>
+<button class="btn-opcion" data-real id="cuenta-nuevo" type="button">NUEVO / GUARDAR</button>
+<button class="btn-opcion" data-real id="cuenta-actualizar" type="button">ACTUALIZAR</button>
+<button class="btn-opcion" data-real id="cuenta-cancelar" type="button">CANCEL</button>
+<button class="btn-opcion" data-real id="cuenta-salir" type="button">SALIR</button>
+</aside>
+</div>
+
+<div class="card">
+<div class="tabla-scroll"><table class="tabla">
+<tr><th>Nombre del usuario(s)</th><th>Login</th><th>Fec.Inic</th><th>Fec.Venc</th><th>Edo. Cta.</th><th>MODIF</th><th>BORRA</th></tr>
+<tbody id="cuerpo-usuarios"></tbody>
+</table></div>
+</div>
+</div>
+
+<div data-ventana="perfil" id="perfil">
+<div class="card">
+<h3>Datos personales de la cuenta</h3>
+<div class="dos">
+<div class="campo"><label>Nombre completo</label><input id="perfil-nombre" readonly type="text" value="—"/></div>
+<div class="campo"><label>Usuario</label><input id="perfil-usuario" readonly type="text" value="—"/></div>
+<div class="campo"><label>Rol</label><input id="perfil-rol" readonly type="text" value="—"/></div>
+<div class="campo"><label>Identificador de persona (id_persona)</label><input id="perfil-id" readonly type="text" value="—"/></div>
+<div class="campo"><label>Puesto</label><input id="perfil-puesto" readonly type="text" value="—"/></div>
+<div class="campo"><label>Correo electrónico</label><input id="perfil-correo" readonly type="text" value="—"/></div>
+<div class="campo"><label>Teléfono</label><input id="perfil-telefono" readonly type="text" value="—"/></div>
+<div class="campo"><label>Último acceso</label><input readonly type="text" value="Hoy (sesión actual)"/></div>
+</div>
+</div>
+</div>
+
+<div data-ventana="bitacora" id="bitacora">
+<div class="card">
+<h3>Bitácora de accesos y acciones sensibles</h3>
+<div class="filtros">
+<div class="campo"><label>Usuario</label><input type="text"/></div>
+<div class="campo"><label>Fecha (desde)</label><input type="text"/></div>
+<div class="campo"><label>Acción</label><input type="text"/></div>
+<div class="campo"><label>Resultado</label><input type="text"/></div>
+</div>
+<div class="tabla-scroll"><table class="tabla">
+<tr><th>Fecha y hora</th><th>Usuario</th><th>Rol</th><th>Acción</th><th>Resultado</th><th>Origen</th></tr>
+<tr><td>27/10/2026 08:02</td><td>gerente</td><td>Gerente / Administrador</td><td>Inicio de sesión</td><td><span class="tag verde">Exitoso</span></td><td>192.168.1.24</td></tr>
+<tr><td>27/10/2026 07:58</td><td>veterinario</td><td>Médico Veterinario</td><td>Inicio de sesión</td><td><span class="tag verde">Exitoso</span></td><td>192.168.1.31</td></tr>
+<tr><td>26/10/2026 21:14</td><td>recinto</td><td>Encargado de Recinto</td><td>Inicio de sesión</td><td><span class="tag verde">Exitoso</span></td><td>192.168.1.40</td></tr>
+<tr><td>26/10/2026 19:47</td><td>invitado</td><td>—</td><td>Inicio de sesión</td><td><span class="tag rojo">Contraseña incorrecta</span></td><td>192.168.1.55</td></tr>
+<tr><td>26/10/2026 16:30</td><td>gerente</td><td>Gerente / Administrador</td><td>Reseteo de contraseña (mantenimiento)</td><td><span class="tag verde">Exitoso</span></td><td>192.168.1.24</td></tr>
+<tr><td>25/10/2026 09:12</td><td>mantenimiento</td><td>Encargado de Mantenimiento</td><td>Inicio de sesión</td><td><span class="tag verde">Exitoso</span></td><td>192.168.1.47</td></tr>
+</table></div>
+<div style="margin-top:8px;display:flex;gap:8px"><button class="btn2" type="button">Exportar bitácora (CSV)</button><button class="btn" style="background:#9AA7B2" type="button">Limpiar filtros</button></div>
+</div>
+</div>
+
+</main>
+</div>
+</div>
+<script src="assets/js/app.js"></script>
+</body>
+</html>

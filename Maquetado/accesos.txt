@@ -1,0 +1,54 @@
+# ============================================================================
+# Relación mAccesos (catálogo de accesos del sistema, sin base de datos)
+# Formato: id_acceso|modulo|operacion|nombre
+#
+#   modulo:    número de módulo del menú lateral (0 a 10)
+#   operacion: Consulta | Alta | Baja | Modificación
+#   nombre:    descripción del acceso tal como se muestra en la pantalla
+#              de asignación de roles y accesos
+#
+# Regla de negocio: un rol que tiene "Alta", "Baja" o "Modificación" en un
+# módulo lo tiene con acceso completo; si solo tiene "Consulta" el acceso
+# es de solo consulta (se marca en el menú con el símbolo ◐).
+# ============================================================================
+0C|0|Consulta|0 · Panel de control
+1C|1|Consulta|1 · Seguridad y accesos · Consulta
+1A|1|Alta|1 · Seguridad y accesos · Alta de usuarios
+1B|1|Baja|1 · Seguridad y accesos · Baja de usuarios
+1M|1|Modificación|1 · Seguridad y accesos · Modificación de usuarios
+2C|2|Consulta|2 · Catálogo zoológico · Mantenimiento de catálogos
+2A|2|Alta|2 · Catálogo zoológico · Alta de catálogos
+2B|2|Baja|2 · Catálogo zoológico · Baja de catálogos
+2M|2|Modificación|2 · Catálogo zoológico · Modificación de catálogos
+3C|3|Consulta|3 · Nutrición · Consulta
+3A|3|Alta|3 · Nutrición · Alta de alimentos y dietas
+3B|3|Baja|3 · Nutrición · Baja de alimentos y dietas
+3M|3|Modificación|3 · Nutrición · Modificación de alimentos y dietas
+4C|4|Consulta|4 · Operación diaria · Consulta
+4A|4|Alta|4 · Operación diaria · Alta de registros
+4B|4|Baja|4 · Operación diaria · Baja de registros
+4M|4|Modificación|4 · Operación diaria · Modificación de registros
+5C|5|Consulta|5 · Inventario y compras · Consulta
+5A|5|Alta|5 · Inventario y compras · Alta de movimientos
+5B|5|Baja|5 · Inventario y compras · Baja de movimientos
+5M|5|Modificación|5 · Inventario y compras · Modificación de movimientos
+6C|6|Consulta|6 · Reportes · Consulta
+6A|6|Alta|6 · Reportes · Alta de reportes
+6B|6|Baja|6 · Reportes · Baja de reportes
+6M|6|Modificación|6 · Reportes · Modificación de reportes
+7C|7|Consulta|7 · Configuración · Consulta
+7A|7|Alta|7 · Configuración · Alta de parámetros
+7B|7|Baja|7 · Configuración · Baja de parámetros
+7M|7|Modificación|7 · Configuración · Modificación de parámetros
+8C|8|Consulta|8 · Clínica veterinaria · Consulta
+8A|8|Alta|8 · Clínica veterinaria · Alta de expedientes
+8B|8|Baja|8 · Clínica veterinaria · Baja de expedientes
+8M|8|Modificación|8 · Clínica veterinaria · Modificación de expedientes
+9C|9|Consulta|9 · Personal y turnos · Consulta
+9A|9|Alta|9 · Personal y turnos · Alta de personal
+9B|9|Baja|9 · Personal y turnos · Baja de personal
+9M|9|Modificación|9 · Personal y turnos · Modificación de personal
+10C|10|Consulta|10 · Mantenimiento · Consulta
+10A|10|Alta|10 · Mantenimiento · Alta de solicitudes
+10B|10|Baja|10 · Mantenimiento · Baja de solicitudes
+10M|10|Modificación|10 · Mantenimiento · Modificación de solicitudes

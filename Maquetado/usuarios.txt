@@ -1,0 +1,34 @@
+# ============================================================================
+# Relación mUsuarios (sin base de datos: se lee desde este archivo .txt)
+# Formato: usuario|contrasena|rol|id_persona|estado|fecIni|fecFin
+#
+# LOGIN (11 a 16 caracteres):
+#   1 mayuscula + 2 minusculas + 2 digitos + 3 letras + 2 digitos
+#   + al menos 1 caracter especial (+ . * $ @ ; %)
+# PASSWORD (exactamente 16 caracteres):
+#   1 mayuscula + 2 minusculas + 2 digitos + 3 letras + 2 digitos
+#   + 3 letras + 2 digitos + 1 caracter especial (+ . * $ @ ; %)
+#
+# estado: true | false      Vigencia: dd/mm/aaaa (validada con la fecha actual)
+# ============================================================================
+Joh12Man05$nm|Ger12abc34Def56@|Gerente / Administrador|P002|true|01/01/2026|31/12/2026
+Nor23Pen45@lp|Vet90vax11Bcd22*|Médico Veterinario|P003|true|01/01/2026|31/12/2026
+Oma12Rec78*om|Rec34ani56Mno78+|Encargado de Recinto|P001|true|01/01/2026|31/12/2026
+Mar45Mto90+cr|Mto01fij23Pqr45$|Encargado de Mantenimiento|P004|true|01/01/2026|31/12/2026
+# ----------------------------------------------------------------------------
+# Cuentas de prueba de vigencia de la cuenta (logeo y cambio de contraseña).
+# Reproducen los mensajes de salida del sistema:
+#
+#   Pro20Mot04+  vigencia futura  → "Cuenta Pendiente de Activar"
+#                                  (estado true y fecha actual < FecIni)
+#   Pro24Mot04+  estado false     → "Cuenta desactivada, póngase en contacto
+#                                  con el administrador"
+#   Pro18Mot04+  vigencia vencida → 1.er intento: "Cuenta desabilitada,
+#                                  póngase en contacto con el administrador"
+#                                  (y deja EdoCta=false)
+#                                  2.º intento: "Cuenta Caducada, póngase en
+#                                  contacto con el administrador"
+# ----------------------------------------------------------------------------
+Pro20Mot04+|Pro20Mot04Bar26+|Gerente / Administrador|P005|true|01/12/2026|31/12/2026
+Pro24Mot04+|Pro24Mot04Bar26+|Gerente / Administrador|P007|false|01/01/2026|31/12/2026
+Pro18Mot04+|Pro18Mot04Bar26+|Gerente / Administrador|P006|true|18/04/2026|18/05/2026

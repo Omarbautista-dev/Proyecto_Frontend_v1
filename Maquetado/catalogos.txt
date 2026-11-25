@@ -1,0 +1,15 @@
+# ============================================================================
+# Relación mCatalogos (catálogos del sistema, sin base de datos)
+# Formato: id_catalogo|nombre|descripcion
+#
+#   id_catalogo: identificador corto que se usa para agrupar los registros
+#                de catalogos-registros.txt
+#   nombre:      texto que aparece en el campo "Nombre de Catálogo"
+#   descripcion: descripción del catálogo
+# ============================================================================
+especies|Especies|Especies y grupos de la colección zoológica
+recintos|Recintos|Recintos y áreas del parque
+alimentos|Categorías de alimento|Categorías de alimento del inventario
+estatus|Estatus sanitario|Estatus sanitario de los ejemplares
+unidades|Unidades de medida|Unidades de medida del inventario
+turnos|Turnos de personal|Turnos de operación del parque

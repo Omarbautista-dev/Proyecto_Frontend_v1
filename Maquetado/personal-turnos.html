@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>9.1 Asignación de personal · NutriZoo LT</title>
+<link href="assets/css/estilos.css" rel="stylesheet"/>
+</head>
+<body data-modulo="9" data-pantalla="personal-turnos" data-requiere-sesion="">
+<div class="app-layout">
+<aside aria-label="Menú lateral" class="sidebar" id="sidebar"></aside>
+<div aria-hidden="true" class="velo"></div>
+<div class="main">
+<header class="topbar">
+<div class="topbar-izq">
+<button aria-expanded="false" aria-label="Abrir menú" class="hamburguesa" type="button">☰</button>
+<div class="tit">
+<h1>9.1 Asignación de personal</h1>
+<p>Semana 43</p>
+</div>
+</div>
+<div class="usuario">
+<div class="avatar" id="usuario-iniciales">—</div>
+<div class="datos">
+<strong id="usuario-nombre">—</strong>
+<span id="usuario-rol">—</span>
+</div>
+<a class="salir" href="#" id="cerrar-sesion">Cerrar sesión</a>
+</div>
+</header>
+<main class="contenido">
+
+<div data-ventana="" data-ventana-defecto>
+<div class="kpis">
+<div class="kpi k3"><div class="n">24</div><div class="t">Colaboradores activos</div></div>
+<div class="kpi"><div class="n">36</div><div class="t">Turnos programados esta semana</div></div>
+<div class="kpi k2"><div class="n">1</div><div class="t">Recinto sin encargado asignado</div></div>
+<div class="kpi"><div class="n">96 %</div><div class="t">Cobertura de turnos</div></div>
+</div>
+<div class="card">
+<h3>Encargado a cargo de cada recinto o grupo de animales</h3>
+<div class="tabla-scroll"><table class="tabla">
+<tr><th>Recinto</th><th>Especies / grupo</th><th>Encargado principal</th><th>Suplente</th><th>Extensión</th><th>Vigencia</th></tr>
+<tr><td>Recinto 3</td><td>Jaguar, puma</td><td>O. Bautista</td><td>L. Mendoza</td><td>2101</td><td>01/10 – 31/12/2026</td></tr>
+<tr><td>Recinto 4</td><td>Tigre</td><td>O. Bautista</td><td>L. Mendoza</td><td>2102</td><td>01/10 – 31/12/2026</td></tr>
+<tr><td>Recinto 7</td><td>Loro corona azul, guacamaya</td><td>L. Mendoza</td><td>J. Chan</td><td>2107</td><td>01/10 – 31/12/2026</td></tr>
+<tr><td>Recinto 9</td><td>Primates (mono aullador)</td><td>—</td><td>—</td><td>—</td><td><span class="tag rojo">Pendiente</span></td></tr>
+<tr><td>Recinto 12</td><td>Tapir centroamericano, pecarí</td><td>J. Chan</td><td>R. Aguilar</td><td>2112</td><td>01/10 – 31/12/2026</td></tr>
+</table></div>
+<div style="margin-top:8px;display:flex;gap:8px"><button class="btn2" style="background:#2E7D32" type="button">Asignar encargado</button><button class="btn2" type="button">Registrar suplente</button></div>
+</div>
+</div>
+
+<div data-ventana="horario" id="horario">
+<div class="card">
+<h3>Programación de turnos de la semana</h3>
+<div class="tabla-scroll"><table class="tabla">
+<tr><th>Día</th><th>Turno</th><th>Horario</th><th>Encargado</th><th>Recinto / grupo de animales</th><th>Estatus</th></tr>
+<tr><td>Lun – Vie</td><td>Matutino</td><td>06:00 – 14:00</td><td>O. Bautista</td><td>Recinto 3 y 4 (felinos)</td><td><span class="tag verde">Confirmado</span></td></tr>
+<tr><td>Lun – Vie</td><td>Vespertino</td><td>14:00 – 22:00</td><td>J. Chan</td><td>Recinto 12 (herbívoros)</td><td><span class="tag verde">Confirmado</span></td></tr>
+<tr><td>Lun – Vie</td><td>Matutino</td><td>06:00 – 14:00</td><td>L. Mendoza</td><td>Recinto 7 y aviario (aves)</td><td><span class="tag verde">Confirmado</span></td></tr>
+<tr><td>Sábado</td><td>Matutino</td><td>07:00 – 15:00</td><td>—</td><td>Recinto 9 (primates)</td><td><span class="tag rojo">Sin asignar</span></td></tr>
+<tr><td>Domingo</td><td>Nocturno</td><td>22:00 – 06:00</td><td>R. Aguilar</td><td>Ronda general (18 recintos)</td><td><span class="tag azul">Programado</span></td></tr>
+</table></div>
+<div style="margin-top:8px;display:flex;gap:8px"><button class="btn2" type="button">Nuevo turno</button><button class="btn2" style="background:#EF6C00" type="button">Modificar horario</button></div>
+</div>
+</div>
+
+</main>
+</div>
+</div>
+<script src="assets/js/app.js"></script>
+</body>
+</html>

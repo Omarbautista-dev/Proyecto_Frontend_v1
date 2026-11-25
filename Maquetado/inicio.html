@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Panel de control · NutriZoo LT</title>
+<link rel="stylesheet" href="assets/css/estilos.css">
+</head>
+<body data-requiere-sesion data-pantalla="inicio" data-modulo="0">
+<div class="app-layout">
+  <aside class="sidebar" id="sidebar" aria-label="Menú lateral"></aside>
+  <div class="velo" aria-hidden="true"></div>
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar-izq">
+        <button type="button" class="hamburguesa" aria-label="Abrir menú" aria-expanded="false">☰</button>
+        <div class="tit">
+          <h1>Panel de control</h1>
+          <p>Resumen de la operación nutricional del día</p>
+        </div>
+      </div>
+      <div class="usuario">
+        <div class="avatar" id="usuario-iniciales">—</div>
+        <div class="datos">
+          <strong id="usuario-nombre">—</strong>
+          <span id="usuario-rol">—</span>
+        </div>
+        <a href="#" class="salir" id="cerrar-sesion">Cerrar sesión</a>
+      </div>
+    </header>
+    <main class="contenido">
+
+<div data-ventana="" data-ventana-defecto>
+
+<div class="kpis">
+<div class="kpi k1"><div class="n">12</div><div class="t">Alimentaciones pendientes de hoy</div></div>
+<div class="kpi"><div class="n">48</div><div class="t">Raciones surtidas esta semana</div></div>
+<div class="kpi k2"><div class="n">3</div><div class="t">Alimentos bajo el stock mínimo</div></div>
+<div class="kpi k3"><div class="n">67</div><div class="t">Animales registrados</div></div>
+</div>
+<div class="card">
+<h3>Accesos rápidos del perfil</h3>
+<div data-roles="gerente">
+<div class="acciones" style="margin-top:0">
+<a class="btn2" href="gerente-dashboard.html">Dashboard general</a>
+<a class="btn2" href="inventario-compras.html">Inventario y compras</a>
+<a class="btn2" href="personal-turnos.html">Personal y turnos</a>
+<a class="btn2" href="seguridad-usuarios.html">Seguridad y usuarios</a>
+<a class="btn2" href="catalogo-censo.html">Censo faunístico</a>
+<a class="btn2" href="reportes-oficiales.html">Reportes oficiales</a>
+</div>
+</div>
+<div data-roles="veterinario">
+<div class="acciones" style="margin-top:0">
+<a class="btn2" href="clinico-expediente.html">Expediente clínico</a>
+<a class="btn2" href="nutricion-dietas-nueva.html">Dietas y nutrición</a>
+<a class="btn2" href="operacion-supervision.html">Supervisión de alimentación</a>
+<a class="btn2" href="clinico-recetas.html">Medicamentos y recetas</a>
+</div>
+</div>
+<div data-roles="recinto">
+<div class="acciones" style="margin-top:0">
+<a class="btn2" href="recinto-mis-animales.html">Mis animales asignados</a>
+<a class="btn2" href="recinto-retiro.html">Retiro de insumos</a>
+<a class="btn2" href="recinto-bitacora.html">Bitácora de limpieza</a>
+<a class="btn2" href="recinto-incidencias.html">Incidencias y alertas</a>
+<a class="btn2" href="operacion-registro.html">Registrar alimentación</a>
+</div>
+</div>
+<div data-roles="mantenimiento">
+<div class="acciones" style="margin-top:0">
+<a class="btn2" href="mantenimiento-solicitudes.html">Solicitudes y averías</a>
+<a class="btn2" href="mantenimiento-calendario.html">Mantenimiento preventivo</a>
+<a class="btn2" href="mantenimiento-reparaciones.html">Reparaciones y materiales</a>
+</div>
+</div>
+</div>
+
+<div class="card">
+<h3>Consumo de alimento (últimos 7 días, kg)</h3>
+<div class="chart chart-barras"><div class="bar" style="height:46%"></div><div class="bar" style="height:70%"></div><div class="bar" style="height:55%"></div><div class="bar" style="height:88%"></div><div class="bar" style="height:62%"></div><div class="bar" style="height:74%"></div><div class="bar" style="height:50%"></div></div>
+</div>
+
+</div>
+
+<div data-ventana="pendientes" id="pendientes">
+<div class="card">
+<h3>Pendientes del día por recinto</h3>
+<div class="tabla-scroll"><table class="tabla">
+<tr><th>Hora</th><th>Recinto</th><th>Especie / Animal</th><th>Dieta</th><th>Estatus</th></tr>
+<tr><td>07:00</td><td>Recinto 3</td><td>Jaguar — "Kia"</td><td>Dieta carnívora A</td><td><span class="tag verde">Surtido</span></td></tr>
+<tr><td>10:00</td><td>Recinto 7</td><td>Loro corona azul</td><td>Dieta frugívora</td><td><span class="tag naran">Pendiente</span></td></tr>
+<tr><td>14:00</td><td>Recinto 12</td><td>Tapir centroamericano</td><td>Dieta herbívora</td><td><span class="tag rojo">Atrasado</span></td></tr>
+<tr><td>16:00</td><td>Recinto 3</td><td>Jaguar — "Kia"</td><td>Dieta carnívora A</td><td><span class="tag azul">Programado</span></td></tr>
+<tr><td>18:00</td><td>Recinto 4</td><td>Tigre — "Nube"</td><td>Dieta de recuperación</td><td><span class="tag azul">Programado</span></td></tr>
+</table></div>
+<div style="margin-top:8px;display:flex;gap:8px"><button class="btn2" type="button">Marcar como surtido</button><button class="btn2" style="background:#EF6C00" type="button">Reasignar turno</button></div>
+</div>
+</div>
+
+    </main>
+  </div>
+</div>
+<script src="assets/js/app.js"></script>
+</body>
+</html>

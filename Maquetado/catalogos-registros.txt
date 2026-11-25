@@ -1,0 +1,38 @@
+# ============================================================================
+# Relación mCatalogosDet (registros de cada catálogo, sin base de datos)
+# Formato: id_catalogo|clave|descripcion
+#
+#   clave:       clave única dentro del catálogo (prefijo secuencial)
+#   descripcion: texto de la columna "Descripción"
+#
+# Los cambios hechos desde la pantalla "Mantenimiento de catálogos" se guardan
+# en el almacenamiento local del navegador y se aplican sobre este archivo.
+# ============================================================================
+especies|ESP-001|Felinos
+especies|ESP-002|Ungulados
+especies|ESP-003|Aves
+especies|ESP-004|Primates
+especies|ESP-005|Mamíferos
+recintos|REC-001|Recinto 3 · Felinos
+recintos|REC-002|Recinto 4 · Felinos
+recintos|REC-003|Recinto 5 · Tropical
+recintos|REC-004|Recinto 7 · Aviario
+recintos|REC-005|Recinto 9 · Primates
+recintos|REC-006|Recinto 12 · Herbívoros
+alimentos|ALI-001|Forraje verde
+alimentos|ALI-002|Fruta fresca
+alimentos|ALI-003|Verduras
+alimentos|ALI-004|Carne y pescado
+alimentos|ALI-005|Piensos balanceados
+estatus|EST-001|Estable
+estatus|EST-002|Observación
+estatus|EST-003|En tratamiento
+estatus|EST-004|Cuarentena
+unidades|UNI-001|Kilogramo (kg)
+unidades|UNI-002|Gramo (g)
+unidades|UNI-003|Litro (L)
+unidades|UNI-004|Vial
+unidades|UNI-005|Ración
+turnos|TUR-001|Matutino (06:00 a 14:00)
+turnos|TUR-002|Vespertino (14:00 a 22:00)
+turnos|TUR-003|Nocturno (22:00 a 06:00)

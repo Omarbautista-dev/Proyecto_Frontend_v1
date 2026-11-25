@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NutriZoo LT</title>
+<link rel="stylesheet" href="assets/css/estilos.css">
+<script>
+  if (sessionStorage.getItem('nz_usuario')) {
+    window.location.replace('inicio.html');
+  } else {
+    window.location.replace('login.html');
+  }
+</script>
+</head>
+<body>
+  <main class="login-page">
+    <section class="login-card" style="text-align:center;">
+      <div class="sello" aria-hidden="true">Z</div>
+      <h1 class="zl">NutriZoo <span>LT</span></h1>
+      <p class="zs">Redirigiendo al inicio de sesión…</p>
+      <p><a class="btn2" href="login.html">Abrir login</a></p>
+    </section>
+  </main>
+</body>
+</html>

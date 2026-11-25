@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>5.1 Existencias de alimento · NutriZoo LT</title>
+<link href="assets/css/estilos.css" rel="stylesheet"/>
+</head>
+<body data-modulo="5" data-pantalla="inventario-existencias" data-requiere-sesion="">
+<div class="app-layout">
+<aside aria-label="Menú lateral" class="sidebar" id="sidebar"></aside>
+<div aria-hidden="true" class="velo"></div>
+<div class="main">
+<header class="topbar">
+<div class="topbar-izq">
+<button aria-expanded="false" aria-label="Abrir menú" class="hamburguesa" type="button">☰</button>
+<div class="tit">
+<h1>5.1 Existencias de alimento</h1>
+<p>Jefe de almacén</p>
+</div>
+</div>
+<div class="usuario">
+<div class="avatar" id="usuario-iniciales">—</div>
+<div class="datos">
+<strong id="usuario-nombre">—</strong>
+<span id="usuario-rol">—</span>
+</div>
+<a class="salir" href="#" id="cerrar-sesion">Cerrar sesión</a>
+</div>
+</header>
+<main class="contenido">
+
+<div data-ventana="" data-ventana-defecto>
+<div class="kpis">
+<div class="kpi k3"><div class="n">34</div><div class="t">Insumos en catálogo</div></div>
+<div class="kpi"><div class="n">1,280</div><div class="t">Kg totales en bodega</div></div>
+<div class="kpi k1"><div class="n">5</div><div class="t">Próximos a caducar</div></div>
+<div class="kpi k2"><div class="n">3</div><div class="t">Debajo del mínimo</div></div>
+</div>
+<div class="card">
+<h3>Existencias por alimento</h3>
+<div class="tabla-scroll"><table class="tabla">
+<tr><th>Alimento</th><th>Categoría</th><th>Existencia</th><th>Mínimo</th><th>Proveedor</th><th>Estatus</th></tr>
+<tr><td>Carne de res</td><td>Carnes</td><td>120 kg</td><td>80 kg</td><td>Abastos del Norte</td><td><span class="tag verde">Disponible</span></td></tr>
+<tr><td>Zacate</td><td>Forraje</td><td>35 kg</td><td>60 kg</td><td>Agropecuaria Chiapas</td><td><span class="tag rojo">Bajo mínimo</span></td></tr>
+<tr><td>Mezcla de semillas</td><td>Granos</td><td>48 kg</td><td>25 kg</td><td>Pet Supply</td><td><span class="tag verde">Disponible</span></td></tr>
+<tr><td>Plátano</td><td>Frutas</td><td>60 kg</td><td>30 kg</td><td>Mercado de La Trinitaria</td><td><span class="tag naran">Caduca en 3 días</span></td></tr>
+</table></div>
+<div style="margin-top:8px;display:flex;gap:8px"><button class="btn2" type="button">Registrar entrada</button><button class="btn2" style="background:#C62828" type="button">Registrar merma</button></div>
+</div>
+</div>
+
+<div data-ventana="proveedores" id="proveedores">
+<div class="card">
+<h3>Proveedores registrados</h3>
+<div class="tabla-scroll"><table class="tabla">
+<tr><th>Proveedor</th><th>Contacto</th><th>Teléfono</th><th>Artículos que surte</th><th>Última compra</th><th>Estatus</th><th>Acciones</th></tr>
+<tr><td>Abastos del Norte</td><td>L. Ríos</td><td>961 100 2001</td><td>Carnes</td><td>26/10/2026</td><td><span class="tag verde">Activo</span></td><td class="acc"><button class="btn2" type="button">Editar</button></td></tr>
+<tr><td>Agropecuaria Chiapas</td><td>M. Solís</td><td>961 100 2002</td><td>Forraje y zacate</td><td>24/10/2026</td><td><span class="tag verde">Activo</span></td><td class="acc"><button class="btn2" type="button">Editar</button></td></tr>
+<tr><td>Pet Supply</td><td>R. Gómez</td><td>961 100 2003</td><td>Granos y suplementos</td><td>21/10/2026</td><td><span class="tag verde">Activo</span></td><td class="acc"><button class="btn2" type="button">Editar</button></td></tr>
+<tr><td>Mercado de La Trinitaria</td><td>A. Cruz</td><td>961 100 2004</td><td>Frutas y verduras</td><td>27/10/2026</td><td><span class="tag verde">Activo</span></td><td class="acc"><button class="btn2" type="button">Editar</button></td></tr>
+<tr><td>Farmacia Veterinaria del Sur</td><td>Dr. P. Herrera</td><td>961 100 2005</td><td>Medicamentos</td><td>19/10/2026</td><td><span class="tag verde">Activo</span></td><td class="acc"><button class="btn2" type="button">Editar</button></td></tr>
+<tr><td>Limpieza Integral SA</td><td>C. Mena</td><td>961 100 2006</td><td>Insumos de limpieza</td><td>15/10/2026</td><td><span class="tag naran">Suspendido</span></td><td class="acc"><button class="btn2" type="button">Editar</button></td></tr>
+</table></div>
+<div style="margin-top:8px;display:flex;gap:8px"><button class="btn2" style="background:#2E7D32" type="button">Nuevo proveedor</button><button class="btn2" type="button">Solicitar cotización</button></div>
+</div>
+</div>
+
+</main>
+</div>
+</div>
+<script src="assets/js/app.js"></script>
+</body>
+</html>

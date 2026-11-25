@@ -1,0 +1,8 @@
+P001|Omar de Jesús|Bautista|Ramírez|Encargado de Recinto|omar@ejemplo.com|9610000001
+P002|John Manuelle|Vilar|Ramírez|Gerente / Administrador|john@ejemplo.com|9610000002
+P003|Norma|Peña|López|Médico Veterinario|norma@ejemplo.com|9610000003
+P004|Marco|Cruz|Ramírez|Encargado de Mantenimiento|marco@ejemplo.com|9610000004
+# Personas de las cuentas de prueba de vigencia (logeo y cambio de contraseña)
+P005|Prueba|Veinte|Motriz|Usuario de prueba|prueba20@ejemplo.com|9610000005
+P006|Prueba|Dieciocho|Motriz|Usuario de prueba|prueba18@ejemplo.com|9610000006
+P007|Prueba|Veinticuatro|Motriz|Usuario de prueba|prueba24@ejemplo.com|9610000007

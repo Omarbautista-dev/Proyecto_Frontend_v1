@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>10.3 Registro de reparaciones y solicitud de materiales · NutriZoo LT</title>
+<link href="assets/css/estilos.css" rel="stylesheet"/>
+</head>
+<body data-modulo="10" data-pantalla="mantenimiento-reparaciones" data-requiere-sesion="">
+<div class="app-layout">
+<aside aria-label="Menú lateral" class="sidebar" id="sidebar"></aside>
+<div aria-hidden="true" class="velo"></div>
+<div class="main">
+<header class="topbar">
+<div class="topbar-izq">
+<button aria-expanded="false" aria-label="Abrir menú" class="hamburguesa" type="button">☰</button>
+<div class="tit">
+<h1>10.3 Registro de reparaciones y solicitud de materiales</h1>
+<p>Infraestructura del parque</p>
+</div>
+</div>
+<div class="usuario">
+<div class="avatar" id="usuario-iniciales">—</div>
+<div class="datos">
+<strong id="usuario-nombre">—</strong>
+<span id="usuario-rol">—</span>
+</div>
+<a class="salir" href="#" id="cerrar-sesion">Cerrar sesión</a>
+</div>
+</header>
+<main class="contenido">
+<div class="card">
+<h3>Registro de reparaciones — marcaje de tareas completadas</h3>
+<div class="tabla-scroll"><table class="tabla">
+<tr><th style="width:26px"></th><th>Folio</th><th>Tarea</th><th>Recinto / área</th><th>Inicio</th><th>Conclusión</th><th>Responsable</th><th>Estatus</th></tr>
+<tr><td><span aria-label="Actividad completada" class="chk on" role="img"></span></td><td>MTTO-115</td><td>Cambio de cerrojo de acceso</td><td>Recinto 5</td><td>26/10 09:00</td><td>26/10 11:30</td><td>M. Cruz</td><td><span class="tag verde">Completada</span></td></tr>
+<tr><td><span aria-label="Actividad completada" class="chk on" role="img"></span></td><td>MTTO-113</td><td>Soldadura de malla perimetral</td><td>Zona norte</td><td>24/10 08:00</td><td>24/10 16:00</td><td>M. Cruz</td><td><span class="tag verde">Completada</span></td></tr>
+<tr><td><span aria-label="Actividad pendiente" class="chk" role="img"></span></td><td>MTTO-118</td><td>Reemplazo de empaque del bebedero B-4</td><td>Recinto 4</td><td>27/10 12:00</td><td>—</td><td>M. Cruz</td><td><span class="tag azul">En proceso</span></td></tr>
+<tr><td><span aria-label="Actividad pendiente" class="chk" role="img"></span></td><td>MTTO-117</td><td>Ajuste de cerrojo del foso</td><td>Recinto 12</td><td>28/10 08:00</td><td>—</td><td>J. Pérez</td><td><span class="tag naran">Programada</span></td></tr>
+<tr><td><span aria-label="Actividad pendiente" class="chk" role="img"></span></td><td>MTTO-114</td><td>Purga y ajuste de bomba de agua</td><td>Bebederos N4</td><td>—</td><td>—</td><td>M. Cruz</td><td><span class="tag rojo">Pendiente de materiales</span></td></tr>
+</table></div>
+<div style="margin-top:8px;display:flex;gap:8px"><button class="btn2" type="button">Marcar como completada</button><button class="btn" style="background:#9AA7B2" type="button">Agregar nota de trabajo</button></div>
+</div>
+<div class="card">
+<h3>Solicitud de materiales de construcción o refacciones (requiere aprobación del Gerente)</h3>
+<div class="tabla-scroll"><table class="tabla">
+<tr><th>#</th><th>Descripción</th><th>Cant.</th><th>Unidad</th><th>Proveedor estimado</th><th>Costo aprox.</th><th>Estatus</th><th>Acción</th></tr>
+<tr><td>1</td><td>Malla perimetral galvanizada 2.5 m</td><td>30</td><td>m</td><td>Aceros de Chiapas</td><td>$3,750</td><td><span class="tag naran">Enviada al Gerente</span></td><td class="acc"><button class="btn2" type="button">Editar</button></td></tr>
+<tr><td>2</td><td>Cerrojo reforzado tipo palanca</td><td>6</td><td>pza</td><td>Ferretería del Valle</td><td>$1,920</td><td><span class="tag naran">Enviada al Gerente</span></td><td class="acc"><button class="btn2" type="button">Editar</button></td></tr>
+<tr><td>3</td><td>Empaques para bebedero B-4</td><td>10</td><td>pza</td><td>Pet Supply</td><td>$450</td><td><span class="tag verde">Autorizada</span></td><td class="acc"><button class="btn2" type="button">Ver</button></td></tr>
+<tr><td>4</td><td>Cable THWN 12 AWG</td><td>50</td><td>m</td><td>Eléctrica del Sur</td><td>$1,100</td><td><span class="tag rojo">Rechazada (presupuesto)</span></td><td class="acc"><button class="btn2" type="button">Ver</button></td></tr>
+</table></div>
+<div style="margin-top:8px;display:flex;gap:8px"><button class="btn2" type="button">Enviar solicitud al Gerente</button><button class="btn" type="button">Adjuntar cotizaciones</button><button class="btn" style="background:#9AA7B2" type="button">Descargar solicitud PDF</button></div>
+<div style="margin-top:8px"><span class="msj av" style="margin:0"><b>Total solicitado:</b> $5,670 · La solicitud queda en espera hasta que el Gerente apruebe o rechace cada partida (pantalla 8).</span></div>
+</div>
+</main>
+</div>
+</div>
+<script src="assets/js/app.js"></script>
+</body>
+</html>

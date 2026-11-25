@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>4.1 Registro de alimentación · NutriZoo LT</title>
+<link href="assets/css/estilos.css" rel="stylesheet"/>
+</head>
+<body data-modulo="4" data-pantalla="operacion-registro" data-requiere-sesion="">
+<div class="app-layout">
+<aside aria-label="Menú lateral" class="sidebar" id="sidebar"></aside>
+<div aria-hidden="true" class="velo"></div>
+<div class="main">
+<header class="topbar">
+<div class="topbar-izq">
+<button aria-expanded="false" aria-label="Abrir menú" class="hamburguesa" type="button">☰</button>
+<div class="tit">
+<h1>4.1 Registro de alimentación</h1>
+<p>Turno matutino · 27/10/2026</p>
+</div>
+</div>
+<div class="usuario">
+<div class="avatar" id="usuario-iniciales">—</div>
+<div class="datos">
+<strong id="usuario-nombre">—</strong>
+<span id="usuario-rol">—</span>
+</div>
+<a class="salir" href="#" id="cerrar-sesion">Cerrar sesión</a>
+</div>
+</header>
+<main class="contenido">
+<div class="card">
+<h3>Captura de ración suministrada</h3>
+<div class="dos">
+<div class="campo"><label>Animal (especie — nombre)</label><input type="text"/></div>
+<div class="campo"><label>Recinto</label><input type="text"/></div>
+<div class="campo"><label>Alimento</label><input type="text"/></div>
+<div class="campo"><label>Cantidad suministrada (kg / piezas)</label><input type="text"/></div>
+<div class="campo"><label>Fecha</label><input type="text"/></div>
+<div class="campo"><label>Hora real de entrega</label><input type="text"/></div>
+</div>
+<div class="campo"><label>Observaciones (sustitución, rechazo, etc.)</label><input style="height:32px" type="text"/></div>
+<div style="display:flex;gap:8px"><button class="btn2" type="button">Guardar registro</button><button class="btn" style="background:#9AA7B2" type="button">Cancelar</button></div>
+</div>
+<div class="card">
+<h3>Registros del turno</h3>
+<div class="tabla-scroll"><table class="tabla">
+<tr><th>Hora</th><th>Animal</th><th>Alimento</th><th>Cantidad</th><th>Cuidador</th></tr>
+<tr><td>07:05</td><td>Jaguar — "Kia"</td><td>Res (carne)</td><td>2.5 kg</td><td>O. Bautista</td></tr>
+<tr><td>07:20</td><td>Tapir — "Chia"</td><td>Zacate</td><td>4.0 kg</td><td>O. Bautista</td></tr>
+<tr><td>07:40</td><td>Loro corona azul</td><td>Mezcla de semillas</td><td>150 g</td><td>O. Bautista</td></tr>
+</table></div>
+</div>
+</main>
+</div>
+</div>
+<script src="assets/js/app.js"></script>
+</body>
+</html>

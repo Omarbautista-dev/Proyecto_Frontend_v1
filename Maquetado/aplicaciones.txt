@@ -1,0 +1,22 @@
+# ============================================================================
+# Relación mAplicaciones (aplicaciones / módulos del sistema, sin base de datos)
+# Formato: clave|descripcion
+#
+#   clave:       clave de la aplicación; el número coincide con el módulo
+#                del menú lateral (00 a 10) para relacionarla con accesos.txt
+#   descripcion: nombre de la aplicación
+#
+# Los cambios hechos desde la pantalla "Aplicaciones" se guardan en el
+# almacenamiento local del navegador y se aplican sobre este archivo.
+# ============================================================================
+APP00|Panel de control
+APP01|Seguridad y accesos
+APP02|Catálogo zoológico
+APP03|Nutrición
+APP04|Operación diaria
+APP05|Inventario y compras
+APP06|Reportes
+APP07|Configuración
+APP08|Clínica veterinaria
+APP09|Personal y turnos
+APP10|Mantenimiento

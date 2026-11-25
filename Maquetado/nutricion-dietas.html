@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>3.3 Dietas · NutriZoo LT</title>
+<link href="assets/css/estilos.css" rel="stylesheet"/>
+</head>
+<body data-modulo="3" data-pantalla="nutricion-dietas" data-requiere-sesion="">
+<div class="app-layout">
+<aside aria-label="Menú lateral" class="sidebar" id="sidebar"></aside>
+<div aria-hidden="true" class="velo"></div>
+<div class="main">
+<header class="topbar">
+<div class="topbar-izq">
+<button aria-expanded="false" aria-label="Abrir menú" class="hamburguesa" type="button">☰</button>
+<div class="tit">
+<h1>3.3 Dietas</h1>
+<p>Plan nutricional por especie o por animal</p>
+</div>
+</div>
+<div class="usuario">
+<div class="avatar" id="usuario-iniciales">—</div>
+<div class="datos">
+<strong id="usuario-nombre">—</strong>
+<span id="usuario-rol">—</span>
+</div>
+<a class="salir" href="#" id="cerrar-sesion">Cerrar sesión</a>
+</div>
+</header>
+<main class="contenido">
+
+<div data-ventana="" data-ventana-defecto>
+<div class="card">
+<h3>Dietas vigentes en el parque</h3>
+<div class="tabla-scroll"><table class="tabla">
+<tr><th>Dieta</th><th>Especie / ejemplar</th><th>Total porción</th><th>Frecuencia</th><th>Vigencia</th><th>Estatus</th><th>Acciones</th></tr>
+<tr><td>Dieta carnívora A</td><td>Jaguar — "Kia"</td><td>4.0 kg/día</td><td>2 al día</td><td>01/10 – 31/12/2026</td><td><span class="tag verde">Activa</span></td><td class="acc"><button class="btn2" type="button">Ver detalle</button></td></tr>
+<tr><td>Dieta herbívora</td><td>Tapir centroamericano</td><td>6.5 kg/día</td><td>3 al día</td><td>01/10 – 31/12/2026</td><td><span class="tag verde">Activa</span></td><td class="acc"><button class="btn2" type="button">Ver detalle</button></td></tr>
+<tr><td>Dieta frugívora</td><td>Loro corona azul</td><td>150 g/día</td><td>2 al día</td><td>15/09 – 15/12/2026</td><td><span class="tag verde">Activa</span></td><td class="acc"><button class="btn2" type="button">Ver detalle</button></td></tr>
+<tr><td>Dieta de recuperación</td><td>"Nube" — Tigre</td><td>3.2 kg/día</td><td>3 al día</td><td>26/10 – 09/11/2026</td><td><span class="tag naran">Temporal</span></td><td class="acc"><button class="btn2" type="button">Ver detalle</button></td></tr>
+<tr><td>Dieta omnívora B</td><td>Oso hormiguero</td><td>1.2 kg/día</td><td>2 al día</td><td>—</td><td><span class="tag azul">Borrador</span></td><td class="acc"><button class="btn2" type="button">Ver detalle</button></td></tr>
+</table></div>
+<div style="margin-top:8px;display:flex;gap:8px"><button class="btn2" style="background:#2E7D32" type="button">Nueva dieta</button><button class="btn2" type="button">Duplicar dieta</button></div>
+</div>
+</div>
+
+<div data-ventana="detalle" id="detalle">
+<div class="card">
+<h3>Detalle de la dieta</h3>
+<div class="tabla-scroll"><table class="tabla">
+<tr><th>Alimento</th><th>Cantidad</th><th>Unidad</th><th>% ración</th></tr>
+<tr><td>Carne de res</td><td>2.5</td><td>kg</td><td>60 %</td></tr>
+<tr><td>Hueso fresco</td><td>0.8</td><td>kg</td><td>20 %</td></tr>
+<tr><td>Vitaminas (suplemento)</td><td>0.1</td><td>kg</td><td>5 %</td></tr>
+<tr><td>Fruta</td><td>0.6</td><td>kg</td><td>15 %</td></tr>
+</table></div>
+<div style="margin-top:8px;display:flex;gap:8px"><button class="btn2" type="button">Agregar alimento</button><button class="btn" type="button">Guardar dieta</button></div>
+</div>
+</div>
+
+<div data-ventana="horarios" id="horarios">
+<div class="card">
+<h3>Horario de alimentación de la dieta</h3>
+<div class="tabla-scroll"><table class="tabla">
+<tr><th>Día</th><th>Hora</th><th>Turno</th><th>Recinto</th><th>Estatus</th></tr>
+<tr><td>Lunes a viernes</td><td>07:00</td><td>Matutino</td><td>Recinto 3</td><td><span class="tag verde">Activo</span></td></tr>
+<tr><td>Lunes a viernes</td><td>16:00</td><td>Vespertino</td><td>Recinto 3</td><td><span class="tag verde">Activo</span></td></tr>
+<tr><td>Domingo</td><td>09:00</td><td>Matutino</td><td>Recinto 3</td><td><span class="tag azul">Programado</span></td></tr>
+</table></div>
+<div style="margin-top:8px;display:flex;gap:8px"><button class="btn2" style="background:#2E7D32" type="button">Nuevo horario</button><button class="btn2" type="button">Pausar horario</button></div>
+</div>
+</div>
+
+<div data-ventana="dietas-aplicadas" id="dietas-aplicadas">
+<div class="card">
+<h3>Dietas aplicadas (reporte de cumplimiento)</h3>
+<div class="tabla-scroll"><table class="tabla">
+<tr><th>Fecha</th><th>Ejemplar</th><th>Dieta</th><th>Porción aplicada</th><th>Cumplimiento</th><th>Registrado por</th></tr>
+<tr><td>27/10/2026</td><td>Jaguar — "Kia"</td><td>Dieta carnívora A</td><td>4.0 kg</td><td><span class="tag verde">100 %</span></td><td>O. Bautista (turno matutino)</td></tr>
+<tr><td>27/10/2026</td><td>Tapir centroamericano</td><td>Dieta herbívora</td><td>6.5 kg</td><td><span class="tag verde">100 %</span></td><td>J. Chan (turno matutino)</td></tr>
+<tr><td>26/10/2026</td><td>Loro corona azul</td><td>Dieta frugívora</td><td>120 g</td><td><span class="tag naran">80 %</span></td><td>L. Mendoza (turno vespertino)</td></tr>
+<tr><td>26/10/2026</td><td>"Nube" — Tigre</td><td>Dieta de recuperación</td><td>3.2 kg</td><td><span class="tag verde">100 %</span></td><td>O. Bautista (turno vespertino)</td></tr>
+<tr><td>25/10/2026</td><td>Jaguar — "Kia"</td><td>Dieta carnívora A</td><td>1.8 kg</td><td><span class="tag rojo">45 %</span></td><td>R. Aguilar (turno nocturno)</td></tr>
+</table></div>
+<div style="margin-top:8px;display:flex;gap:8px"><button class="btn2" type="button">Exportar PDF</button><button class="btn2" style="background:#2E7D32" type="button">Exportar Excel</button></div>
+</div>
+</div>
+
+</main>
+</div>
+</div>
+<script src="assets/js/app.js"></script>
+</body>
+</html>

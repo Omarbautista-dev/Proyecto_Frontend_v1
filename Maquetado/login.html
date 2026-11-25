@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Iniciar sesión · NutriZoo LT</title>
+
+<link rel="stylesheet" href="assets/css/estilos.css">
+</head>
+<body>
+
+<main class="login-page">
+  <section class="login-card" aria-labelledby="titulo-login">
+
+    <div class="sello" aria-hidden="true">Z</div>
+    <h1 class="zl" id="titulo-login">NutriZoo <span>LT</span></h1>
+    <p class="zs">Zoológico de La Trinitaria · Chiapas</p>
+
+    <div class="login-error" id="login-error" role="alert" hidden></div>
+
+    <form id="form-login" novalidate>
+      <div class="campo">
+        <label for="usuario">Login <span class="req">*</span></label>
+        <input id="usuario" name="usuario" type="text"
+               autocomplete="username" spellcheck="false" required autofocus>
+      </div>
+
+      <div class="campo">
+        <label for="contrasena">PassWord <span class="req">*</span></label>
+        <div class="campo-clave">
+          <input id="contrasena" name="contrasena" type="password"
+                 autocomplete="current-password" required>
+          <button type="button" class="ver-clave" id="ver-clave"
+                  aria-label="Mostrar contraseña" aria-pressed="false">Ver</button>
+        </div>
+      </div>
+
+      <div class="login-botones">
+        <button type="submit" class="btn2" id="btn-login">ACEPTAR</button>
+      </div>
+    </form>
+  </section>
+
+  <p class="login-pie">
+    <strong>NutriZoo LT</strong> · Zoológico de La Trinitaria
+  </p>
+</main>
+
+<script src="assets/js/app.js"></script>
+</body>
+</html>
