@@ -91,6 +91,11 @@
   }
 
   function paginaActual() {
+    /* data-pantalla (en el body) es la fuente explícita de la pantalla que
+       se está mostrando; si la página no lo declara, se deriva de la URL. */
+    var declarada = document.body && document.body.getAttribute('data-pantalla');
+    if (declarada) return declarada;
+
     var archivo = window.location.pathname.split('/').pop() || 'index.html';
     return archivo.replace(/\.html$/i, '');
   }
@@ -240,6 +245,8 @@
       MAPA_ACCESOS = mapaAccesos;
       MAPA_ROLES = mapaRoles;
 
+      avisarDesfasePermisos(roles);
+
       return { accesos: accesos, roles: roles };
     }).catch(function (error) {
       promesaRoles = null;
@@ -367,6 +374,19 @@
     return VALIDACION_OK;
   }
 
+  /* Regla compartida con el módulo Cambiar de Password: una PassWord no
+     puede estar ya registrada en otra cuenta de mUsuarios. */
+  function passwordUnico(nueva, loginPropio, usuarios) {
+    var duplicado = null;
+
+    usuarios.forEach(function (usuario) {
+      if (usuario.usuario === loginPropio) return;
+      if (usuario.contrasena === nueva) duplicado = usuario;
+    });
+
+    return duplicado;
+  }
+
   function parsearFecha(txt) {
     var coincidencia = /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/.exec(String(txt == null ? '' : txt).trim());
     if (!coincidencia) return null;
@@ -377,7 +397,14 @@
 
     if (mes < 1 || mes > 12 || dia < 1 || dia > 31) return null;
 
-    return new Date(anio, mes - 1, dia);
+    /* new Date() rueda las fechas imposibles (31/02/2026 → 03/03/2026):
+       se verifica que la fecha construida sea exactamente la capturada. */
+    var fecha = new Date(anio, mes - 1, dia);
+    if (fecha.getFullYear() !== anio || fecha.getMonth() !== mes - 1 || fecha.getDate() !== dia) {
+      return null;
+    }
+
+    return fecha;
   }
 
   function fechaActualSinHora() {
@@ -401,6 +428,16 @@
     var partes = String(iso || '').split('-');
     if (partes.length !== 3) return '';
     return partes[2] + '/' + partes[1] + '/' + partes[0];
+  }
+
+  /* nz_ingreso se guarda como ISO (UTC); aquí se convierte a dd/mm/aaaa hh:mm
+     en la hora local del equipo para mostrarlo en "Último acceso". */
+  function fechaHoraDeSesion(iso) {
+    var fecha = new Date(iso);
+    if (isNaN(fecha.getTime())) return '—';
+
+    return dosDigitos(fecha.getDate()) + '/' + dosDigitos(fecha.getMonth() + 1) + '/' +
+      fecha.getFullYear() + ' ' + dosDigitos(fecha.getHours()) + ':' + dosDigitos(fecha.getMinutes());
   }
 
   /* Respaldo local de las escrituras (alta, baja y modificación de cuentas de
@@ -643,16 +680,63 @@
     return { ok: true, mensaje: '' };
   }
 
+  /* Intentos fallidos de acceso. Se guardan en localStorage para que
+     sobrevivan al cierre de la pestaña, se limpian al iniciar sesión
+     correctamente y se descartan solos al vencer la ventana de tiempo. */
+  var CLAVE_INTENTOS = 'nz_intentos';
+  var MAX_INTENTOS = 5;
+  var VENTANA_INTENTOS = 15 * 60 * 1000;   /* 15 minutos */
+
+  function leerIntentos() {
+    var origen = leerObjetoLocal(CLAVE_INTENTOS);
+    var vigentes = {};
+    var ahora = Date.now();
+
+    Object.keys(origen).forEach(function (login) {
+      var registro = origen[login];
+      if (!registro || typeof registro.desde !== 'number') return;
+      if (ahora - registro.desde > VENTANA_INTENTOS) return;
+      vigentes[login] = registro;
+    });
+
+    return vigentes;
+  }
+
+  function escribirIntentos(mapa) {
+    /* Sin registros se elimina la clave para no dejar residuos en el navegador */
+    if (Object.keys(mapa).length === 0) {
+      localStorage.removeItem(CLAVE_INTENTOS);
+      return;
+    }
+    localStorage.setItem(CLAVE_INTENTOS, JSON.stringify(mapa));
+  }
+
+  function bloqueoPorIntentos(login) {
+    var registro = leerIntentos()[login];
+    if (!registro || registro.total < MAX_INTENTOS) return '';
+
+    var restante = Math.max(1, Math.ceil((VENTANA_INTENTOS - (Date.now() - registro.desde)) / 60000));
+    return 'Demasiados intentos fallidos (' + registro.total + '). Vuelve a intentarlo en ' +
+      'aproximadamente ' + restante + ' minuto(s), o solicita el restablecimiento al administrador del sistema.';
+  }
+
   function registrarIntento(login) {
-    var clave = 'nz_intentos_' + login;
-    var total = parseInt(sessionStorage.getItem(clave) || '0', 10) || 0;
-    total += 1;
-    sessionStorage.setItem(clave, String(total));
-    return total;
+    var mapa = leerIntentos();
+    var registro = mapa[login] || { total: 0, desde: Date.now() };
+
+    registro.total += 1;
+    mapa[login] = registro;
+    escribirIntentos(mapa);
+
+    return registro.total;
   }
 
   function limpiarIntentos(login) {
-    sessionStorage.removeItem('nz_intentos_' + login);
+    /* leerIntentos() descarta los registros vencidos, así que reescribir el
+       mapa limpia de una vez el intento propio y cualquier residuo antiguo */
+    var mapa = leerIntentos();
+    delete mapa[login];
+    escribirIntentos(mapa);
   }
 
   function nombreCompletoDe(persona) {
@@ -804,9 +888,8 @@
         { etiqueta: '1.1 Roles y accesos', ruta: 'roles-accesos.html', titulo: '1.1 Roles, usuarios y accesos' },
         { etiqueta: '1.2 Asignación de roles', ruta: 'seguridad-roles.html', titulo: '1.2 Asignación de roles a usuarios' },
         { etiqueta: '1.3 Usuarios', ruta: 'seguridad-usuarios.html#usuarios', titulo: '1.3 Control de usuarios y permisos' },
-        { etiqueta: '1.4 Mi perfil', ruta: 'seguridad-usuarios.html#perfil', titulo: '1.4 Mi perfil de usuario' },
-        { etiqueta: '1.5 Bitácora de accesos', ruta: 'seguridad-usuarios.html#bitacora', titulo: '1.5 Bitácora de accesos' },
-        { etiqueta: '1.6 Aplicaciones del sistema', ruta: 'seguridad-aplicaciones.html', titulo: '1.6 Aplicaciones del sistema' }
+        { etiqueta: '1.4 Bitácora de accesos', ruta: 'seguridad-usuarios.html#bitacora', titulo: '1.4 Bitácora de accesos' },
+        { etiqueta: '1.5 Aplicaciones del sistema', ruta: 'seguridad-aplicaciones.html', titulo: '1.5 Aplicaciones del sistema' }
       ]
     },
     {
@@ -827,7 +910,9 @@
         {
           etiqueta: '3.3 Dietas',
           ruta: 'nutricion-dietas.html',
-          rutaPorRol: { veterinario: 'nutricion-dietas-nueva.html' }
+          /* Sólo el Gerente tiene Alta/Baja/Modificación en el módulo 3; los
+             demás perfiles tienen sólo Consulta y van al listado de solo lectura. */
+          rutaPorRol: { gerente: 'nutricion-dietas-nueva.html' }
         },
         { etiqueta: '3.4 Detalle de dieta', ruta: 'nutricion-dietas.html#detalle', titulo: '3.4 Detalle de la dieta' },
         { etiqueta: '3.5 Horarios', ruta: 'nutricion-dietas.html#horarios', titulo: '3.5 Horarios de alimentación' }
@@ -900,6 +985,10 @@
         { etiqueta: '10.3 Reparaciones y materiales', ruta: 'mantenimiento-reparaciones.html' }
       ]
     },
+    /* Sin módulo: disponible para todos los perfiles, igual que Cambiar de
+       Password. "Mi perfil" vivía dentro del módulo 1 y por eso sólo el
+       Gerente podía verlo. */
+    { id: 'mi-perfil', etiqueta: 'Mi perfil', ruta: 'mi-perfil.html' },
     { id: 'cambiar-clave', etiqueta: 'Cambiar de Password', ruta: 'cambiar-password.html' },
     { id: 'salir', etiqueta: 'Cerrar Sesión', accion: 'salir' }
   ];
@@ -934,6 +1023,45 @@
     /* Si los archivos de roles no se pudieron leer se usan los permisos base */
     var permisos = PERMISOS[String(modulo)] || {};
     return permisos[rolKey] || '';
+  }
+
+  /* PERMISOS es sólo el respaldo de lectura de roles.txt / accesos.txt. Si
+     las dos fuentes dejan de coincidir se avisa en consola, para que no
+     convivan silenciosamente dos versiones distintas de los permisos. */
+  function avisarDesfasePermisos(roles) {
+    if (!MAPA_ROLES) return;
+
+    /* Se comparan las dos direcciones: lo que PERMISOS declara debe existir
+       en roles.txt y lo que roles.txt otorga debe estar declarado en PERMISOS. */
+    var modulos = {};
+    Object.keys(PERMISOS).forEach(function (modulo) { modulos[modulo] = true; });
+    roles.forEach(function (rol) {
+      Object.keys(MAPA_ACCESOS || {}).forEach(function (id) {
+        var acceso = MAPA_ACCESOS[id];
+        modulos[String(acceso.modulo)] = true;
+      });
+      modulos[String(0)] = true;   /* el módulo 0 se otorga completo siempre */
+    });
+
+    roles.forEach(function (rol) {
+      Object.keys(modulos).forEach(function (modulo) {
+        var operaciones = operacionesDeRolEnModulo(rol.clave, modulo);
+        var obtenido = '';
+
+        if (operaciones['Alta'] || operaciones['Baja'] || operaciones['Modificación']) obtenido = 'full';
+        else if (operaciones['Consulta']) obtenido = 'consulta';
+
+        if (String(modulo) === '0') return;
+
+        var esperado = (PERMISOS[modulo] && PERMISOS[modulo][rol.clave]) || '';
+
+        if (obtenido !== esperado) {
+          console.warn('Permisos fuera de sincronía: módulo ' + modulo + ' del rol "' + rol.clave +
+            '" = "' + (esperado || '(sin entrada)') + '" en PERMISOS y "' + (obtenido || '(sin acceso)') +
+            '" en roles.txt.');
+        }
+      });
+    });
   }
 
   function rutaDeSubmenu(sub, rolKey) {
@@ -1093,7 +1221,7 @@
         var idSubmenu = 'sub-' + item.id;
         html += '<li>';
         html += '<button type="button" class="item grupo" aria-expanded="false" aria-controls="' + idSubmenu + '">';
-        html += '<span class="etiqueta-menu">' + item.etiqueta;
+        html += '<span class="etiqueta-menu">' + escapar(item.etiqueta);
         if (permiso === 'consulta') {
           html += ' <span class="acceso-parcial" title="Solo consulta" aria-label="Solo consulta">◐</span>';
         }
@@ -1102,20 +1230,20 @@
 
         item.submenu.forEach(function (sub) {
           if (sub.bloqueado) {
-            html += '<li><a class="item sub bloqueado" href="#" data-bloqueado>' + sub.etiqueta + '</a></li>';
+            html += '<li><a class="item sub bloqueado" href="#" data-bloqueado>' + escapar(sub.etiqueta) + '</a></li>';
           } else {
             var tituloSub = sub.titulo || sub.tituloPorRol ? ' data-titulo="' + escapar((sub.tituloPorRol && sub.tituloPorRol[rolKey]) || sub.titulo || '') + '"' : '';
-            html += '<li><a class="item sub" href="' + escapar(rutaDeSubmenu(sub, rolKey)) + '"' + tituloSub + '>' + sub.etiqueta + '</a></li>';
+            html += '<li><a class="item sub" href="' + escapar(rutaDeSubmenu(sub, rolKey)) + '"' + tituloSub + '>' + escapar(sub.etiqueta) + '</a></li>';
           }
         });
 
         html += '</ul></li>';
       } else if (item.accion === 'salir') {
         html += '<li><a class="item" href="#" data-cerrar-sesion>';
-        html += '<span class="etiqueta-menu">' + item.etiqueta + '</span></a></li>';
+        html += '<span class="etiqueta-menu">' + escapar(item.etiqueta) + '</span></a></li>';
       } else {
         html += '<li><a class="item" href="' + escapar(item.ruta) + '">';
-        html += '<span class="etiqueta-menu">' + item.etiqueta;
+        html += '<span class="etiqueta-menu">' + escapar(item.etiqueta);
         if (permiso === 'consulta') {
           html += ' <span class="acceso-parcial" title="Solo consulta" aria-label="Solo consulta">◐</span>';
         }
@@ -1194,7 +1322,7 @@
       return;
     }
 
-    var boton = e.target.closest('.contenido .btn, .contenido .btn2, .contenido .btn-rojo, .contenido .btnrojo, .contenido .btn-contorno');
+    var boton = e.target.closest('.contenido .btn, .contenido .btn2, .contenido .btn-rojo, .contenido .btnrojo, .contenido .btn-gris, .contenido .btn-contorno, .contenido .btn-opcion');
     if (boton && boton.tagName !== 'A' && !boton.hasAttribute('data-real')) {
       e.preventDefault();
       toast('Acción no disponible.');
@@ -1275,19 +1403,30 @@
         return;
       }
 
-      /* 1. Reglas de formato del login y de la contraseña */
+      /* 1. Bloqueo temporal por intentos fallidos (se revisa antes que nada) */
+      var bloqueo = bloqueoPorIntentos(usuarioEscrito);
+      if (bloqueo) {
+        mostrarError(bloqueo);
+        toast('Demasiados intentos fallidos.', 'error');
+        return;
+      }
+
+      /* 2. Reglas de formato del login y de la contraseña. Si el formato
+            falla se muestra el motivo exacto que ya calcularon validarLogin
+            y validarPassword, en lugar del mensaje genérico. */
       var reglaLogin = validarLogin(usuarioEscrito);
       var reglaPassword = validarPassword(contrasenaEscrita);
 
-      var detLogin = reglaLogin.ok ? '' : 'No existe o formato incorrecto';
-      var detPassword = reglaPassword.ok ? '' : 'No existe o formato incorrecto';
+      if (!reglaLogin.ok || !reglaPassword.ok) {
+        var detallesFormato = [];
+        if (!reglaLogin.ok) {
+          detallesFormato.push({ campo: 'Login', texto: 'Formato inválido: ' + reglaLogin.error });
+        }
+        if (!reglaPassword.ok) {
+          detallesFormato.push({ campo: 'Password', texto: 'Formato inválido: ' + reglaPassword.error });
+        }
 
-      /* 2. Si ninguno de los dos cumple el formato, el resultado ya está determinado */
-      if (detLogin && detPassword) {
-        mostrarError('login o Password, incorrecto', [
-          { campo: 'Login', texto: detLogin },
-          { campo: 'Password', texto: detPassword }
-        ]);
+        mostrarError('login o Password, incorrecto', detallesFormato);
         campoContrasena.value = '';
         campoContrasena.focus();
         toast('No fue posible iniciar sesión.', 'error');
@@ -1302,6 +1441,8 @@
 
       cargarDatos().then(function (datos) {
         var encontrado = null;
+        var detLogin = '';
+        var detPassword = '';
         var i;
 
         /* 3. El login debe existir previamente registrado, tal y como se escribió */
@@ -1329,11 +1470,16 @@
           detPassword = 'No existe o formato incorrecto';
         }
 
-        /* 5. Si falta alguno de los dos datos → mensaje general con el detalle que falle */
+        /* 5. Si falta alguno de los dos datos → mensaje general con el detalle que falle.
+              Cuando el login sí existe y el PassWord no corresponde, el intento
+              también cuenta para el bloqueo: si no, un ataque con contraseñas
+              inventadas nunca alcanzaría el límite. */
         if (detLogin || detPassword) {
           var detalles = [];
           if (detLogin) detalles.push({ campo: 'Login', texto: detLogin });
           if (detPassword) detalles.push({ campo: 'Password', texto: detPassword });
+
+          if (!detLogin) registrarIntento(usuarioEscrito);
 
           mostrarError('login o Password, incorrecto', detalles);
           campoContrasena.value = '';
@@ -1451,6 +1597,27 @@
     if (elRol) elRol.textContent = sesion.rol;
     if (elAvatar) elAvatar.textContent = iniciales(nombre);
 
+    /* El bloque del usuario en la barra superior abre "Mi perfil": hasta ahora
+       el topbar no tenía ninguna ruta al perfil y éste vivía sólo en el
+       módulo 1 (sólo visible para el Gerente). */
+    var cajaUsuario = document.querySelector('.topbar .usuario .datos');
+    if (cajaUsuario) {
+      cajaUsuario.setAttribute('data-perfil', '');
+      cajaUsuario.setAttribute('role', 'link');
+      cajaUsuario.setAttribute('tabindex', '0');
+      cajaUsuario.setAttribute('title', 'Ver mi perfil');
+
+      var abrirPerfil = function () { window.location.href = 'mi-perfil.html'; };
+
+      cajaUsuario.addEventListener('click', abrirPerfil);
+      cajaUsuario.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          abrirPerfil();
+        }
+      });
+    }
+
     var perfilNombre = document.getElementById('perfil-nombre');
     if (perfilNombre) {
       cargarDatos().then(function (datos) {
@@ -1462,7 +1629,8 @@
           'perfil-id': sesion.idPersona || '—',
           'perfil-puesto': (persona && persona.puesto) || '—',
           'perfil-correo': (persona && persona.correo) || '—',
-          'perfil-telefono': (persona && persona.telefono) || '—'
+          'perfil-telefono': (persona && persona.telefono) || '—',
+          'perfil-ultimo-acceso': fechaHoraDeSesion(sesion.ingreso)
         };
 
         Object.keys(valores).forEach(function (id) {
@@ -1666,10 +1834,7 @@
         }
 
         if (!errsNueva.length) {
-          var duplicado = null;
-          datos.usuarios.forEach(function (usuario) {
-            if (usuario.usuario !== actual.usuario && usuario.contrasena === nueva) duplicado = usuario;
-          });
+          var duplicado = passwordUnico(nueva, actual.usuario, datos.usuarios);
 
           if (duplicado) {
             errsNueva.push('Dato inconsistente: el PassWord ya está registrado en mUsuarios (login "' + duplicado.usuario + '")');
@@ -1807,6 +1972,18 @@
       });
     }
 
+    /* En modo consulta los campos de captura quedan bloqueados (mismo
+       patrón que Roles y accesos y Aplicaciones del sistema): sólo el
+       botón NUEVO / GUARDAR entra en captura. El selector de persona se
+       deja habilitado porque es el arranque natural de una captura nueva. */
+    function bloquearCampos(bloquear) {
+      campoLogin.readOnly = bloquear;
+      campoPassword.readOnly = bloquear;
+      campoIni.disabled = bloquear;
+      campoFin.disabled = bloquear;
+      if (campoEstado) campoEstado.disabled = bloquear;
+    }
+
     function limpiarFormulario() {
       campoPersona.value = '';
       campoLogin.value = '';
@@ -1820,16 +1997,24 @@
 
     function iniciarNuevo() {
       modo = 'nuevo';
+
+      /* Se conserva la persona ya elegida: limpiar no debe deshacer el
+         primer gesto del usuario (bug: borraba lo recién capturado). */
+      var personaElegida = campoPersona.value;
       limpiarFormulario();
-      campoLogin.readOnly = false;
+      if (personaElegida) campoPersona.value = personaElegida;
+
+      bloquearCampos(false);
       if (botonNuevo) botonNuevo.textContent = 'GUARDAR';
-      campoPersona.focus();
+
+      if (personaElegida) campoLogin.focus();
+      else campoPersona.focus();
     }
 
     function volverConsulta() {
       modo = 'consulta';
       limpiarFormulario();
-      campoLogin.readOnly = false;
+      bloquearCampos(true);
       if (botonNuevo) botonNuevo.textContent = 'NUEVO / GUARDAR';
     }
 
@@ -1861,6 +2046,22 @@
       if (datos.contrasena) {
         var reglaPassword = validarPassword(datos.contrasena);
         if (!reglaPassword.ok) return 'PASSWORD: ' + reglaPassword.error;
+
+        /* Misma regla que el módulo Cambiar de Password */
+        var duplicado = passwordUnico(datos.contrasena, esNuevo ? '' : loginEdicion, usuarios);
+        if (duplicado) {
+          return 'PASSWORD: ya está registrado en mUsuarios (login "' + duplicado.usuario + '").';
+        }
+
+        if (!esNuevo && loginEdicion) {
+          var cuentaActual = null;
+          usuarios.forEach(function (usuario) {
+            if (usuario.usuario === loginEdicion) cuentaActual = usuario;
+          });
+          if (cuentaActual && cuentaActual.contrasena === datos.contrasena) {
+            return 'PASSWORD: el PassWord Nuevo debe ser distinto al PassWord actual.';
+          }
+        }
       }
 
       if (datos.fecIni && datos.fecFin) {
@@ -1868,6 +2069,22 @@
         var fechaFin = parsearFecha(datos.fecFin);
         if (fechaIni && fechaFin && fechaFin < fechaIni) {
           return 'FECHA DE TÉRMINO: debe ser posterior a la fecha de inicio.';
+        }
+      }
+
+      /* Igual que en BORRA: no se puede dejar fuera de servicio la cuenta
+         con la que se inició sesión (auto-bloqueo). */
+      if (!esNuevo && loginEdicion === sesion.usuario) {
+        if (datos.estado === 'false') {
+          return 'EDO. DE LA CUENTA: no puedes desactivar la cuenta con la que iniciaste sesión.';
+        }
+
+        if (datos.fecFin) {
+          var hoy = fechaActualSinHora();
+          var vence = parsearFecha(datos.fecFin);
+          if (vence && hoy > vence) {
+            return 'FECHA DE TÉRMINO: no puedes dejar vencida la cuenta con la que iniciaste sesión.';
+          }
         }
       }
 
@@ -1956,6 +2173,7 @@
         modo = 'edicion';
         loginEdicion = login;
         mostrarError('');
+        bloquearCampos(false);
         campoPersona.value = usuario.idPersona || '';
         campoLogin.value = usuario.usuario;
         campoLogin.readOnly = true;
@@ -2023,21 +2241,27 @@
       });
     }
 
-    [campoPersona, campoLogin, campoPassword, campoIni, campoFin].forEach(function (campo) {
+    /* Los campos de captura sólo se usan cuando ya se entró en modo nuevo
+       o edición (están bloqueados en consulta), así que aquí sólo se limpia
+       el mensaje de error. */
+    [campoLogin, campoPassword, campoIni, campoFin].forEach(function (campo) {
       if (!campo) return;
-      campo.addEventListener('input', function () {
-        mostrarError('');
-        if (modo === 'consulta') iniciarNuevo();
-      });
-      campo.addEventListener('change', function () {
-        mostrarError('');
-        if (modo === 'consulta') iniciarNuevo();
-      });
+      campo.addEventListener('input', function () { mostrarError(''); });
+      campo.addEventListener('change', function () { mostrarError(''); });
     });
+
+    /* El selector de persona sí está habilitado en consulta: al elegir una
+       persona se entra en captura conservando la selección. */
+    if (campoPersona) {
+      campoPersona.addEventListener('change', function () {
+        mostrarError('');
+        if (modo === 'consulta') iniciarNuevo();
+      });
+    }
 
     if (campoEstado) {
       campoEstado.addEventListener('change', function () {
-        if (modo === 'consulta') iniciarNuevo();
+        mostrarError('');
       });
     }
 
@@ -2116,6 +2340,7 @@
       }
     }
 
+    bloquearCampos(true);
     recargar();
   }
 
@@ -2135,7 +2360,9 @@
     var listaAccesosDer = document.getElementById('accesos-asignados');
     var cajaMsg = document.getElementById('roles-msg');
 
-    if (!selectorRol || !campoClave || !listaUsuariosIzq || !listaAccesosIzq) return;
+    if (!selectorRol || !campoClave || !campoNombre || !campoDescripcion ||
+        !listaUsuariosIzq || !listaUsuariosDer ||
+        !listaAccesosIzq || !listaAccesosDer) return;
 
     var sesion = leerSesion();
     var modo = 'consulta';       /* consulta | nuevo | edicion */
@@ -2177,17 +2404,6 @@
 
     function valoresDe(lista) {
       return Array.prototype.slice.call(lista.options).map(function (opcion) { return opcion.value; });
-    }
-
-    function nombreDeUsuario(login) {
-      var texto = login;
-      usuariosBase.forEach(function (usuario) {
-        if (usuario.usuario !== login) return;
-        var persona = null;
-        /* el nombre completo se resuelve con el mapa cuando está disponible */
-        texto = usuario.nombreCompleto || login;
-      });
-      return texto;
     }
 
     function etiquetaUsuario(usuario) {
@@ -2272,7 +2488,10 @@
       campoClave.readOnly = bloquear;
       campoNombre.readOnly = bloquear;
       campoDescripcion.readOnly = bloquear;
-      selectorRol.disabled = bloquear && modo === 'nuevo';
+      /* Sólo se bloquea el selector mientras se captura un rol nuevo: si el
+         usuario lo tocara durante la captura, cargarRol() borraría sin avisar
+         la clave, el nombre y la descripción capturados. */
+      selectorRol.disabled = modo === 'nuevo';
     }
 
     function limpiarTodo() {
@@ -2373,6 +2592,21 @@
       var esAlta = modo === 'nuevo';
       var miembrosNuevos = valoresDe(listaUsuariosDer);
       var sesionCambio = '';
+
+      /* Misma confirmación que en "Asignación de roles": no se cambia ni se
+         quita el rol de la cuenta en sesión sin avisar al usuario. */
+      if (miembrosNuevos.indexOf(sesion.usuario) !== -1) {
+        if (normalizar(nuevos.nombre) !== normalizar(sesion.rol) &&
+            !window.confirm('Vas a cambiar el rol de la cuenta con la que iniciaste sesión (' +
+              sesion.rol + ' → ' + nuevos.nombre + '). ¿Deseas continuar?')) {
+          return;
+        }
+      } else if (miembrosOriginales.indexOf(sesion.usuario) !== -1) {
+        if (!window.confirm('Vas a quitar el rol de la cuenta con la que iniciaste sesión (' +
+          sesion.rol + '). Quedará como "Sin rol asignado". ¿Deseas continuar?')) {
+          return;
+        }
+      }
 
       guardarRol(nuevos);
 
@@ -3351,6 +3585,11 @@
     }
 
     function grabarNuevo() {
+      if (soloConsulta) {
+        mostrarMsg('Tu perfil tiene acceso de solo consulta en este módulo: no puedes dar de alta registros.', 'er');
+        return;
+      }
+
       var descripcion = campoDescripcion.value.trim();
       var error = validarDescripcion(descripcion, '');
 
@@ -3527,7 +3766,7 @@
         catalogoActual = CATALOGOS[0].id;
       }
 
-      soloConsulta = permisoDe('2', claveRol(leerSesion().rol)) === 'consulta';
+      soloConsulta = permisoDe(document.body.getAttribute('data-modulo'), claveRol(leerSesion().rol)) === 'consulta';
       bloquearEscritura(soloConsulta);
       pintarTabla();
 
@@ -3837,6 +4076,11 @@
     }
 
     function guardar() {
+      if (soloConsulta) {
+        mostrarMsg('Tu perfil tiene acceso de solo consulta en este módulo: no puedes modificar aplicaciones.', 'er');
+        return;
+      }
+
       var datos = {
         clave: campoClave.value.trim(),
         descripcion: campoDescripcion.value.trim()
@@ -3933,7 +4177,7 @@
     });
 
     Promise.all([cargarAplicaciones(), cargarRoles()]).then(function () {
-      soloConsulta = permisoDe('1', claveRol(leerSesion().rol)) === 'consulta';
+      soloConsulta = permisoDe(document.body.getAttribute('data-modulo'), claveRol(leerSesion().rol)) === 'consulta';
       bloquearEscritura(soloConsulta);
       pintarTabla();
     }).catch(function (error) {

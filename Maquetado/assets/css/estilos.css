@@ -9,13 +9,11 @@
   --naranja: #EF6C00;
   --rojo: #C62828;
   --fondo: #F5F7FA;
-  --fondo-app: #EEF2F6;
   --texto: #22313F;
   --gris: #5A6B7B;
   --gris-claro: #8A97A3;
   --borde: #E1E7EC;
   --borde-input: #D5DDE5;
-  --sombra: 0 1px 3px rgba(16, 42, 67, .08);
   --sombra-card: 0 2px 8px rgba(16, 42, 67, .06);
   --radio: 8px;
 }
@@ -242,6 +240,14 @@ img, svg { display: block; }
 }
 
 .usuario .datos span { font-size: 11px; }
+
+/* El bloque de usuario del topbar es la vía de acceso a "Mi perfil" */
+.usuario .datos[data-perfil] { cursor: pointer; }
+.usuario .datos[data-perfil]:focus-visible {
+  outline: 2px solid var(--azul);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
 
 .usuario .salir {
   margin-left: 4px;
@@ -671,6 +677,13 @@ img, svg { display: block; }
   margin-top: 4px;
   font-size: 13px;
   letter-spacing: .6px;
+}
+
+/* Agrupación de los botones del formulario de login */
+.login-botones {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .login-card .olvido {
