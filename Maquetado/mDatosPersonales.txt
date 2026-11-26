@@ -1,0 +1,8 @@
+# Relación mDatosPersonales
+# Formato: id_persona|nombres|ap_p|ap_m|puesto|correo|telefono
+# Los puestos corresponden a roles existentes en la maqueta; correo y teléfono no fueron proporcionados.
+1|Mauricio José De Jesús|Del Niño|Jesús|Encargado de Recinto||
+2|Brayan de Jesus|Del Rosario|Del Carmen|Encargado de Mantenimiento||
+3|Trinidad|Camargo|Salas|Médico Veterinario||
+4|Policarpo Simitrio|Solano||Encargado de Mantenimiento||
+5|Guadalupe|Llamas|Alfonzo|Encargado de Recinto||

@@ -60,45 +60,18 @@
 <tr><td>Alertas de salud y cuarentenas</td><td>Correo + panel</td><td>En tiempo real</td><td><span class="tag verde">Activada</span></td><td class="acc"><button class="btn" type="button">Desactivar</button></td></tr>
 <tr><td>Resumen diario de alimentación</td><td>Correo</td><td>19:00 h</td><td><span class="tag verde">Activada</span></td><td class="acc"><button class="btn" type="button">Desactivar</button></td></tr>
 <tr><td>Avisos de mantenimiento</td><td>Panel</td><td>En tiempo real</td><td><span class="tag naran">Pausada</span></td><td class="acc"><button class="btn" type="button">Activar</button></td></tr>
-<tr><td>Copia de seguridad automática</td><td>Correo</td><td>Semanal (domingo)</td><td><span class="tag verde">Activada</span></td><td class="acc"><button class="btn" type="button">Desactivar</button></td></tr>
+
 </table></div>
 </div>
 </div>
 
 <div data-ventana="respaldo" id="respaldo">
-<div class="kpis">
-<div class="kpi k3"><div class="n">14</div><div class="t">Respaldos generados</div></div>
-<div class="kpi"><div class="n">3.4 GB</div><div class="t">Espacio utilizado</div></div>
-<div class="kpi k2"><div class="n">27/10/2026</div><div class="t">Último respaldo</div></div>
-<div class="kpi"><div class="n">30 días</div><div class="t">Retención configurada</div></div>
-</div>
 <div class="card">
-<h3>Generar nuevo respaldo</h3>
-<div class="form-grid">
-<div class="campo"><label for="rb-tipo">Tipo de respaldo</label><select id="rb-tipo"><option selected>Completo (todo el contenido)</option><option>Incremental (solo cambios del día)</option></select></div>
-<div class="campo"><label for="rb-alcance">Alcance</label><select id="rb-alcance"><option selected>Todo el sistema</option><option>Solo usuarios y personas</option><option>Solo expedientes clínicos</option></select></div>
-<div class="campo"><label for="rb-formato">Formato</label><select id="rb-formato"><option selected>ZIP comprimido</option><option>TAR.GZ</option></select></div>
-<div class="campo"><label for="rb-destino">Destino</label><select id="rb-destino"><option selected>Almacenamiento local</option><option>Descarga directa al equipo</option></select></div>
-</div>
-<div class="acciones">
-<button class="btn2" type="button">Generar respaldo ahora</button>
-<button class="btn" type="button">Programar respaldo automático</button>
-</div>
-</div>
-<div class="card">
-<h3>Historial de respaldos</h3>
-<div class="tabla-scroll"><table class="tabla">
-<thead>
-<tr><th>Fecha</th><th>Tipo</th><th>Tamaño</th><th>Estatus</th><th>Acciones</th></tr>
-</thead>
-<tr><td>27/10/2026 03:00</td><td>Completo</td><td>412 MB</td><td><span class="tag verde">Exitoso</span></td><td class="acc"><button class="btn" type="button">Descargar</button><button class="btn-contorno" type="button">Restaurar</button></td></tr>
-<tr><td>26/10/2026 03:00</td><td>Incremental</td><td>58 MB</td><td><span class="tag verde">Exitoso</span></td><td class="acc"><button class="btn" type="button">Descargar</button><button class="btn-contorno" type="button">Restaurar</button></td></tr>
-<tr><td>25/10/2026 03:00</td><td>Incremental</td><td>61 MB</td><td><span class="tag verde">Exitoso</span></td><td class="acc"><button class="btn" type="button">Descargar</button><button class="btn-contorno" type="button">Restaurar</button></td></tr>
-<tr><td>24/10/2026 03:00</td><td>Completo</td><td>405 MB</td><td><span class="tag verde">Exitoso</span></td><td class="acc"><button class="btn" type="button">Descargar</button><button class="btn-contorno" type="button">Restaurar</button></td></tr>
-<tr><td>23/10/2026 03:00</td><td>Incremental</td><td>—</td><td><span class="tag rojo">Fallido</span></td><td class="acc"><button class="btn" type="button">Reintentar</button></td></tr>
-<tr><td>22/10/2026 03:00</td><td>Completo</td><td>398 MB</td><td><span class="tag verde">Exitoso</span></td><td class="acc"><button class="btn" type="button">Descargar</button><button class="btn-contorno" type="button">Restaurar</button></td></tr>
-</table></div>
-<div class="tabla-pie">14 respaldos en los últimos 30 días · retención automática: 30 días</div>
+<h3>Restauración de datos — no disponible en esta maqueta</h3>
+<p>Este proyecto no tiene base de datos ni respaldos reales: usa archivos estáticos y almacenamiento local del navegador. No se ofrece una acción de restauración para evitar simular una operación que no existe.</p>
+<p><b>Decisión pendiente:</b> definir si el sistema final debe restaurar un respaldo validado o reiniciar únicamente datos demo.</p>
+<p>Para habilitar restauración real se necesita backend con autenticación y permiso administrativo, validación de formato/versión/integridad, vista previa, copia previa del estado, transacción con reversión ante fallos y bitácora de usuario, fecha, origen y resultado.</p>
+<div class="acciones"><button class="btn-contorno" type="button" disabled aria-disabled="true">Restauración no disponible</button></div>
 </div>
 </div>
 

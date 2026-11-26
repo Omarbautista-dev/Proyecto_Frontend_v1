@@ -2,7 +2,7 @@
 # Relación mRoles (roles del sistema, sin base de datos)
 # Formato: clave_rol|nombre_rol|descripcion|accesos
 #
-#   nombre_rol: debe coincidir con el campo "rol" de usuarios.txt para que
+#   nombre_rol: debe coincidir con el campo "rol" de mUsuarios.txt para que
 #               la cuenta quede vinculada a sus accesos
 #   accesos:    lista de id_acceso separados por coma (ver accesos.txt)
 #

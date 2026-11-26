@@ -1,11 +1,14 @@
 <!DOCTYPE html>
-
 <html lang="es">
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>6.4 Reportes oficiales · NutriZoo LT</title>
+<title>6. Reportes · NutriZoo LT</title>
 <link href="assets/css/estilos.css" rel="stylesheet"/>
+<style>
+.report-anchor-targets{position:relative;height:0}.report-anchor-targets span{position:absolute;top:0;left:0;width:1px;height:1px;overflow:hidden}
+@media print { .sidebar,.topbar,.filtros-reporte,.acciones-reporte,.velo { display:none!important } .main { margin:0!important } .contenido { padding:0!important } }
+</style>
 </head>
 <body data-modulo="6" data-pantalla="reportes-oficiales" data-requiere-sesion="">
 <div class="app-layout">
@@ -13,58 +16,30 @@
 <div aria-hidden="true" class="velo"></div>
 <div class="main">
 <header class="topbar">
-<div class="topbar-izq">
-<button aria-expanded="false" aria-label="Abrir menú" class="hamburguesa" type="button">☰</button>
-<div class="tit">
-<h1>6.4 Reportes oficiales</h1>
-<p>Auditoría interna · SEMARNAT / PROFEPA</p>
-</div>
-</div>
-<div class="usuario">
-<div class="avatar" id="usuario-iniciales">—</div>
-<div class="datos">
-<strong id="usuario-nombre">—</strong>
-<span id="usuario-rol">—</span>
-</div>
-<a class="salir" href="#" id="cerrar-sesion">Cerrar sesión</a>
-</div>
+<div class="topbar-izq"><button aria-expanded="false" aria-label="Abrir menú" class="hamburguesa" type="button">☰</button><div class="tit"><h1>6. Centro de reportes</h1><p>Consulta por tipo, periodo y filtros; vista previa antes de exportar.</p></div></div>
+<div class="usuario"><div class="avatar" id="usuario-iniciales">—</div><div class="datos"><strong id="usuario-nombre">—</strong><span id="usuario-rol">—</span></div><a class="salir" href="#" id="cerrar-sesion">Cerrar sesión</a></div>
 </header>
 <main class="contenido">
-<div class="card">
-<h3>Generador de reporte</h3>
-<div class="dos">
-<div class="campo"><label>Tipo de reporte</label><input type="text"/></div>
-<div class="campo"><label>Periodo (fecha inicial – final)</label><input type="text"/></div>
-<div class="campo"><label>Alcance (todo el parque / recinto)</label><input type="text"/></div>
-<div class="campo"><label>Destino / autoridad</label><input type="text"/></div>
+<div class="msj av" role="note">Maqueta de demostración: los datos fuente son estáticos y no representan registros transaccionales. Los permisos y la auditoría requieren backend para ser seguros.</div>
+<section class="card filtros-reporte" id="centro" aria-labelledby="titulo-filtros">
+<div class="report-anchor-targets" aria-hidden="true"><span id="consumo"></span><span id="alimentacion"></span><span id="inventario"></span><span id="oficiales"></span></div>
+<h3 id="titulo-filtros">Generar reporte</h3>
+<div class="form-grid">
+<div class="campo"><label for="rep-tipo">Tipo de reporte</label><select id="rep-tipo"><option value="consumo">Consumo</option><option value="inventario">Inventario y mermas</option><option value="alimentacion">Alimentación y dietas</option><option value="salud">Salud / expediente clínico</option><option value="recintos">Recintos y encargados</option><option value="oficiales">Reporte oficial consolidado</option></select></div>
+<div class="campo"><label for="rep-desde">Fecha inicial</label><input id="rep-desde" type="date"/></div>
+<div class="campo"><label for="rep-hasta">Fecha final</label><input id="rep-hasta" type="date"/></div>
+<div class="campo"><label for="rep-alcance">Alcance</label><select id="rep-alcance"><option value="parque">Todo el parque</option><option value="recinto">Recinto</option></select></div>
+<div class="campo"><label for="rep-recinto">Recinto (opcional)</label><input id="rep-recinto" placeholder="Ej. 3" type="search"/></div>
+<div class="campo"><label for="rep-especie">Especie (opcional)</label><input id="rep-especie" placeholder="Nombre común" type="search"/></div>
+<div class="campo"><label for="rep-ejemplar">Ejemplar (opcional)</label><input id="rep-ejemplar" placeholder="Nombre o identificador" type="search"/></div>
 </div>
-<div style="display:flex;gap:8px"><button class="btn2" type="button">Exportar PDF</button><button class="btn2" style="background:#2E7D32" type="button">Exportar Excel</button><button class="btn" style="background:#9AA7B2" type="button">Vista previa</button></div>
-</div>
-<div class="card">
-<h3>Catálogo de reportes para auditorías internas e inspecciones de autoridades</h3>
-<div class="tabla-scroll"><table class="tabla">
-<thead>
-<tr><th>Reporte</th><th>Contenido</th><th>Periodicidad</th><th>Formato</th><th>Acción</th></tr>
-</thead>
-<tr><td>Auditoría interna de alimentación</td><td>Dietas programadas vs. raciones surtidas por recinto</td><td>Mensual</td><td>PDF / Excel</td><td class="acc"><button class="btn2" type="button">PDF</button><button class="btn2" style="background:#2E7D32" type="button">Excel</button></td></tr>
-<tr><td>Inventario y mermas</td><td>Existencias, salidas, caducidades y mermas</td><td>Mensual</td><td>PDF / Excel</td><td class="acc"><button class="btn2" type="button">PDF</button><button class="btn2" style="background:#2E7D32" type="button">Excel</button></td></tr>
-<tr><td>Censo faunístico</td><td>Colección completa por especie, edad, peso y ubicación</td><td>Trimestral</td><td>PDF</td><td class="acc"><button class="btn2" type="button">PDF</button><button class="btn2" style="background:#2E7D32" type="button">Excel</button></td></tr>
-<tr><td>Bitácora de salud y cuarentenas</td><td>Consultas, vacunación, desparasitación y procedimientos</td><td>Semestral</td><td>PDF</td><td class="acc"><button class="btn2" type="button">PDF</button><button class="btn2" style="background:#2E7D32" type="button">Excel</button></td></tr>
-<tr><td>Cumplimiento SEMARNAT</td><td>Trazabilidad de dietas y uso de recursos del parque</td><td>Anual</td><td>PDF</td><td class="acc"><button class="btn2" type="button">PDF</button><button class="btn2" style="background:#2E7D32" type="button">Excel</button></td></tr>
-<tr><td>Inspección PROFEPA (bienestar animal)</td><td>Estado de recintos, mantenimiento e incidencias</td><td>Bajo demanda</td><td>PDF / Excel</td><td class="acc"><button class="btn2" type="button">PDF</button><button class="btn2" style="background:#2E7D32" type="button">Excel</button></td></tr>
-</table></div>
-</div>
-<div class="card">
-<h3>Historial de envíos y folios de recepción</h3>
-<div class="tabla-scroll"><table class="tabla">
-<thead>
-<tr><th>Fecha</th><th>Reporte</th><th>Destino</th><th>Folio</th><th>Estatus</th></tr>
-</thead>
-<tr><td>15/09/2026</td><td>Censo faunístico</td><td>SEMARNAT — Delegación Chiapas</td><td>S-2026-114</td><td><span class="tag verde">Recibido</span></td></tr>
-<tr><td>02/09/2026</td><td>Bienestar animal e instalaciones</td><td>PROFEPA</td><td>P-2026-078</td><td><span class="tag naran">En revisión</span></td></tr>
-<tr><td>30/06/2026</td><td>Auditoría interna de alimentación</td><td>Dirección general del zoológico</td><td>A-2026-031</td><td><span class="tag azul">Archivado</span></td></tr>
-</table></div>
-</div>
+<div class="acciones acciones-reporte"><button class="btn2" data-real id="rep-generar" type="button">Vista previa</button><button class="btn2" data-real id="rep-pdf" disabled type="button">Imprimir / guardar PDF</button><button class="btn2" data-real id="rep-csv" disabled type="button">Descargar CSV para Excel</button></div>
+<p class="tabla-pie" id="rep-generado" aria-live="polite">Selecciona filtros y genera la vista previa. Las fechas invertidas se rechazan.</p>
+</section>
+<section class="card" id="vista-previa" aria-live="polite">
+<h3>Vista previa</h3><div id="rep-resumen">Aún no se ha generado un reporte.</div>
+<div class="tabla-scroll"><table class="tabla report-data-table"><thead><tr><th>Fecha</th><th>Tipo</th><th>Recinto</th><th>Especie / ejemplar</th><th>Detalle / resultado</th><th>Profesional / encargado</th><th>Próximo control / observaciones</th></tr></thead><tbody id="rep-resultados"><tr><td colspan="7">Genera una vista previa para consultar resultados.</td></tr></tbody></table></div>
+</section>
 </main>
 </div>
 </div>

@@ -2,8 +2,8 @@
 (function () {
   'use strict';
 
-  var RUTA_USUARIOS = 'usuarios.txt';
-  var RUTA_PERSONAS = 'personas.txt';
+  var RUTA_USUARIOS = 'mUsuarios.txt';
+  var RUTA_PERSONAS = 'mDatosPersonales.txt';
   var RUTA_ACCESOS = 'accesos.txt';
   var RUTA_ROLES = 'roles.txt';
   var CLAVES_SESION = ['nz_usuario', 'nz_nombre', 'nz_rol', 'nz_ingreso', 'nz_id_persona'];
@@ -119,7 +119,7 @@
 
       var partes = limpia.split('|');
       if (partes.length < 2) {
-        console.warn('personas.txt: la línea ' + (indice + 1) + ' no tiene el formato id_persona|nombres|apellidos|puesto|correo|telefono.');
+        console.warn('mDatosPersonales.txt: la línea ' + (indice + 1) + ' no tiene el formato id_persona|nombres|apellidos|puesto|correo|telefono.');
         return lista;
       }
 
@@ -145,7 +145,7 @@
 
       var partes = limpia.split('|');
       if (partes.length < 4) {
-        console.warn('usuarios.txt: la línea ' + (indice + 1) + ' no tiene el formato usuario|contrasena|rol|id_persona[|estado|fecIni|fecFin].');
+        console.warn('mUsuarios.txt: la línea ' + (indice + 1) + ' no tiene el formato usuario|contrasena|rol|id_persona[|estado|fecIni|fecFin].');
         return lista;
       }
 
@@ -765,7 +765,7 @@
           if (!persona.idPersona) return;
 
           if (mapaPersonas[persona.idPersona]) {
-            console.warn('personas.txt: el id_persona "' + persona.idPersona + '" está duplicado; se conserva el primer registro.');
+            console.warn('mDatosPersonales.txt: el id_persona "' + persona.idPersona + '" está duplicado; se conserva el primer registro.');
             return;
           }
 
@@ -774,7 +774,7 @@
 
         usuarios.forEach(function (usuario) {
           if (!mapaPersonas[usuario.idPersona]) {
-            console.warn('usuarios.txt: el usuario "' + usuario.usuario + '" referencia el id_persona "' + usuario.idPersona + '" que no existe en personas.txt.');
+            console.warn('mUsuarios.txt: el usuario "' + usuario.usuario + '" referencia el id_persona "' + usuario.idPersona + '" que no existe en mDatosPersonales.txt.');
           }
         });
 
@@ -885,7 +885,7 @@
     {
       id: 'seguridad', etiqueta: '1. Seguridad', modulo: '1',
       submenu: [
-        { etiqueta: '1.1 Roles y accesos', ruta: 'roles-accesos.html', titulo: '1.1 Roles, usuarios y accesos' },
+        { etiqueta: '1.1 Creación de roles y permisos', ruta: 'roles-accesos.html', titulo: '1.1 Creación de roles y permisos' },
         { etiqueta: '1.2 Asignación de roles', ruta: 'seguridad-roles.html', titulo: '1.2 Asignación de roles a usuarios' },
         { etiqueta: '1.3 Usuarios', ruta: 'seguridad-usuarios.html#usuarios', titulo: '1.3 Control de usuarios y permisos' },
         { etiqueta: '1.4 Bitácora de accesos', ruta: 'seguridad-usuarios.html#bitacora', titulo: '1.4 Bitácora de accesos' },
@@ -922,7 +922,7 @@
       id: 'operacion', etiqueta: '4. Operación diaria', modulo: '4',
       submenu: [
         { etiqueta: '4.1 Registro de alimentación', ruta: 'operacion-registro.html' },
-        { etiqueta: '4.2 Historial por animal', ruta: 'reportes-consumo.html#historial', titulo: '4.2 Historial de alimentación por animal' },
+        { etiqueta: '4.2 Historial por animal', ruta: 'reportes-oficiales.html#alimentacion', titulo: '4.2 Historial de alimentación por animal' },
         { etiqueta: '4.3 Pendientes del día', ruta: 'inicio.html#pendientes', titulo: '4.3 Pendientes del día' },
         { etiqueta: '4.4 Mis animales asignados', ruta: 'recinto-mis-animales.html' },
         { etiqueta: '4.5 Bitácora de limpieza', ruta: 'recinto-bitacora.html' },
@@ -948,10 +948,10 @@
     {
       id: 'reportes', etiqueta: '6. Reportes', modulo: '6',
       submenu: [
-        { etiqueta: '6.1 Consumo de alimento', ruta: 'reportes-consumo.html' },
-        { etiqueta: '6.2 Dietas aplicadas', ruta: 'nutricion-dietas.html#dietas-aplicadas', titulo: '6.2 Dietas aplicadas' },
-        { etiqueta: '6.3 Inventario y mermas', ruta: 'reportes-consumo.html#mermas', titulo: '6.3 Inventario y mermas' },
-        { etiqueta: '6.4 Reportes oficiales', ruta: 'reportes-oficiales.html' }
+        { etiqueta: '6.1 Centro de reportes', ruta: 'reportes-oficiales.html#consumo', titulo: '6.1 Centro de reportes' },
+        { etiqueta: '6.2 Alimentación y dietas', ruta: 'reportes-oficiales.html#alimentacion', titulo: '6.2 Alimentación y dietas' },
+        { etiqueta: '6.3 Inventario y mermas', ruta: 'reportes-oficiales.html#inventario', titulo: '6.3 Inventario y mermas' },
+        { etiqueta: '6.4 Reportes oficiales', ruta: 'reportes-oficiales.html#oficiales', titulo: '6.4 Reportes oficiales' }
       ]
     },
     {
@@ -974,7 +974,8 @@
       id: 'personal', etiqueta: '9. Personal y turnos', modulo: '9',
       submenu: [
         { etiqueta: '9.1 Asignación de personal', ruta: 'personal-turnos.html' },
-        { etiqueta: '9.2 Horario general', ruta: 'personal-turnos.html#horario', titulo: '9.2 Horario general de turnos' }
+        { etiqueta: '9.2 Horario general', ruta: 'personal-turnos.html#horario', titulo: '9.2 Horario general de turnos' },
+        { etiqueta: '9.3 Encargados y tareas por recinto', ruta: 'gerente-tareas-recintos.html', titulo: '9.3 Encargados y tareas por recinto', soloRol: 'gerente' }
       ]
     },
     {
@@ -1229,6 +1230,7 @@
         html += '<ul class="submenu" id="' + idSubmenu + '">';
 
         item.submenu.forEach(function (sub) {
+          if (sub.soloRol && sub.soloRol !== rolKey) return;
           if (sub.bloqueado) {
             html += '<li><a class="item sub bloqueado" href="#" data-bloqueado>' + escapar(sub.etiqueta) + '</a></li>';
           } else {
@@ -1523,7 +1525,7 @@
         var persona = datos.mapaPersonas[encontrado.idPersona];
 
         if (!persona) {
-          mostrarError('El usuario "' + encontrado.usuario + '" no tiene una persona asociada en personas.txt. Agrega el id_persona del usuario y vuelve a intentarlo.');
+          mostrarError('El usuario "' + encontrado.usuario + '" no tiene una persona asociada en mDatosPersonales.txt. Agrega el id_persona del usuario y vuelve a intentarlo.');
           campoContrasena.value = '';
           campoContrasena.focus();
           toast('Usuario sin persona asociada.', 'error');
@@ -1542,7 +1544,7 @@
         window.location.href = 'inicio.html';
       }).catch(function (error) {
         console.error(error);
-        mostrarError('No se pudieron leer personas.txt y usuarios.txt. Abre el proyecto con un servidor local (Live Server o "python -m http.server") e inténtalo de nuevo.');
+        mostrarError('No se pudieron leer mDatosPersonales.txt y mUsuarios.txt. Abre el proyecto con un servidor local (Live Server o "python -m http.server") e inténtalo de nuevo.');
         toast('Error al cargar los archivos de personas y usuarios.', 'error');
       }).then(function () {
         enviando = false;
@@ -1875,7 +1877,7 @@
         campoAnterior.focus();
       }).catch(function (error) {
         console.error(error);
-        mostrarMsg('No se pudo leer usuarios.txt. Abre el proyecto con un servidor local (Live Server o "python -m http.server") e inténtalo de nuevo.', 'er');
+        mostrarMsg('No se pudo leer mUsuarios.txt. Abre el proyecto con un servidor local (Live Server o "python -m http.server") e inténtalo de nuevo.', 'er');
       });
     });
 
@@ -2354,431 +2356,155 @@
     var campoClave = document.getElementById('rol-clave');
     var campoNombre = document.getElementById('rol-nombre');
     var campoDescripcion = document.getElementById('rol-descripcion');
-    var listaUsuariosIzq = document.getElementById('usuarios-disponibles');
-    var listaUsuariosDer = document.getElementById('usuarios-asignados');
     var listaAccesosIzq = document.getElementById('accesos-disponibles');
     var listaAccesosDer = document.getElementById('accesos-asignados');
     var cajaMsg = document.getElementById('roles-msg');
-
-    if (!selectorRol || !campoClave || !campoNombre || !campoDescripcion ||
-        !listaUsuariosIzq || !listaUsuariosDer ||
-        !listaAccesosIzq || !listaAccesosDer) return;
+    if (!selectorRol || !campoClave || !campoNombre || !campoDescripcion || !listaAccesosIzq || !listaAccesosDer) return;
 
     var sesion = leerSesion();
-    var modo = 'consulta';       /* consulta | nuevo | edicion */
+    var modo = 'consulta';
     var claveEdicion = '';
     var rolesBase = [];
     var accesosBase = [];
     var usuariosBase = [];
-    var miembrosOriginales = [];
+    var soloConsulta = permisoDe('1', claveRol(sesion.rol)) !== 'full';
 
-    function mostrarMsg(texto, tipo) {
-      if (!cajaMsg) {
-        toast(texto, tipo === 'ok' ? 'info' : 'error');
-        return;
-      }
-
+    function mensaje(texto, tipo) {
+      if (!cajaMsg) { toast(texto, tipo === 'ok' ? 'info' : 'error'); return; }
       cajaMsg.className = 'msj ' + (tipo || '');
       cajaMsg.textContent = texto;
       cajaMsg.hidden = false;
     }
-
-    function ocultarMsg() {
-      if (!cajaMsg) return;
-      cajaMsg.textContent = '';
-      cajaMsg.hidden = true;
+    function ocultarMensaje() { if (cajaMsg) { cajaMsg.textContent = ''; cajaMsg.hidden = true; } }
+    function opcion(texto, valor) {
+      var o = document.createElement('option'); o.value = valor; o.textContent = texto; return o;
     }
-
-    function nuevaOpcion(texto, valor) {
-      var opcion = document.createElement('option');
-      opcion.value = valor;
-      opcion.textContent = texto;
-      return opcion;
+    function valores(lista) { return Array.prototype.slice.call(lista.options).map(function (o) { return o.value; }); }
+    function ordena(lista) {
+      Array.prototype.slice.call(lista.options).sort(function (a, b) { return a.textContent.localeCompare(b.textContent); }).forEach(function (o) { lista.appendChild(o); });
     }
-
-    function ordenar(lista) {
-      var opciones = Array.prototype.slice.call(lista.options);
-      opciones.sort(function (a, b) { return a.textContent.localeCompare(b.textContent); });
-      opciones.forEach(function (opcion) { lista.appendChild(opcion); });
-    }
-
-    function valoresDe(lista) {
-      return Array.prototype.slice.call(lista.options).map(function (opcion) { return opcion.value; });
-    }
-
-    function etiquetaUsuario(usuario) {
-      var nombre = usuario.nombreCompleto || usuario.usuario;
-      return nombre + ' (' + usuario.usuario + ')';
-    }
-
     function pintarSelector() {
-      var seleccion = selectorRol.value;
+      var elegido = selectorRol.value;
       selectorRol.innerHTML = '';
-      selectorRol.appendChild(nuevaOpcion('Seleccione un rol', ''));
-
-      rolesBase.forEach(function (rol) {
-        selectorRol.appendChild(nuevaOpcion(rol.nombre + ' (' + rol.clave + ')', rol.clave));
-      });
-
-      if (rolesBase.some(function (rol) { return rol.clave === seleccion; })) {
-        selectorRol.value = seleccion;
-      }
+      selectorRol.appendChild(opcion('Seleccione un rol', ''));
+      rolesBase.forEach(function (rol) { selectorRol.appendChild(opcion(rol.nombre + ' (' + rol.clave + ')', rol.clave)); });
+      if (rolesBase.some(function (r) { return r.clave === elegido; })) selectorRol.value = elegido;
     }
-
-    function rolesDeUsuario(usuario) {
-      var rol = usuario.rol || '';
-      var coincidencia = null;
-
-      rolesBase.forEach(function (candidato) {
-        if (coincidencia) return;
-        if (normalizar(candidato.nombre) === normalizar(rol) || normalizar(candidato.clave) === normalizar(rol)) {
-          coincidencia = candidato.clave;
-        }
-      });
-
-      return coincidencia;
-    }
-
-    function pintarListas() {
-      var izqUsuarios = [];
-      var derUsuarios = [];
-
-      usuariosBase.forEach(function (usuario) {
-        var pertenece = rolesDeUsuario(usuario) === claveEdicion && claveEdicion !== '';
-        if (pertenece) derUsuarios.push(usuario);
-        else izqUsuarios.push(usuario);
-      });
-
-      listaUsuariosIzq.innerHTML = '';
-      listaUsuariosDer.innerHTML = '';
-
-      izqUsuarios.forEach(function (usuario) {
-        listaUsuariosIzq.appendChild(nuevaOpcion(etiquetaUsuario(usuario), usuario.usuario));
-      });
-      derUsuarios.forEach(function (usuario) {
-        listaUsuariosDer.appendChild(nuevaOpcion(etiquetaUsuario(usuario), usuario.usuario));
-      });
-
-      ordenar(listaUsuariosIzq);
-      ordenar(listaUsuariosDer);
-
+    function pintarAccesos() {
       var asignados = [];
-      if (claveEdicion) {
-        rolesBase.forEach(function (rol) {
-          if (rol.clave === claveEdicion) asignados = rol.accesos || [];
-        });
-      }
-
-      listaAccesosIzq.innerHTML = '';
-      listaAccesosDer.innerHTML = '';
-
-      accesosBase.forEach(function (acceso) {
-        var opcion = nuevaOpcion(acceso.nombre, acceso.id);
-        if (asignados.indexOf(acceso.id) !== -1) listaAccesosDer.appendChild(opcion);
-        else listaAccesosIzq.appendChild(opcion);
+      rolesBase.forEach(function (r) { if (r.clave === claveEdicion) asignados = r.accesos || []; });
+      listaAccesosIzq.innerHTML = ''; listaAccesosDer.innerHTML = '';
+      accesosBase.forEach(function (a) {
+        var o = opcion(a.nombre, a.id);
+        (asignados.indexOf(a.id) !== -1 ? listaAccesosDer : listaAccesosIzq).appendChild(o);
       });
-
-      ordenar(listaAccesosIzq);
-      ordenar(listaAccesosDer);
-
-      miembrosOriginales = derUsuarios.map(function (usuario) { return usuario.usuario; });
+      ordena(listaAccesosIzq); ordena(listaAccesosDer);
     }
-
     function bloquearCampos(bloquear) {
-      campoClave.readOnly = bloquear;
+      campoClave.readOnly = bloquear || modo === 'edicion';
       campoNombre.readOnly = bloquear;
       campoDescripcion.readOnly = bloquear;
-      /* Sólo se bloquea el selector mientras se captura un rol nuevo: si el
-         usuario lo tocara durante la captura, cargarRol() borraría sin avisar
-         la clave, el nombre y la descripción capturados. */
       selectorRol.disabled = modo === 'nuevo';
+      document.querySelectorAll('.btn-traslado').forEach(function (b) { b.disabled = soloConsulta || bloquear; });
+      ['t-nuevo', 't-borrar', 't-modif'].forEach(function (id) {
+        var b = document.getElementById(id); if (b) b.disabled = soloConsulta;
+      });
     }
-
-    function limpiarTodo() {
-      modo = 'consulta';
-      claveEdicion = '';
-      campoClave.value = '';
-      campoNombre.value = '';
-      campoDescripcion.value = '';
-      selectorRol.value = '';
-      bloquearCampos(true);
-      pintarListas();
-      ocultarMsg();
+    function limpiar() {
+      modo = 'consulta'; claveEdicion = '';
+      campoClave.value = ''; campoNombre.value = ''; campoDescripcion.value = ''; selectorRol.value = '';
+      bloquearCampos(true); pintarAccesos(); ocultarMensaje();
     }
-
     function cargarRol(clave) {
-      var rol = null;
-      rolesBase.forEach(function (candidato) {
-        if (candidato.clave === clave) rol = candidato;
-      });
-
-      if (!rol) {
-        limpiarTodo();
-        return;
-      }
-
-      modo = 'consulta';
-      claveEdicion = rol.clave;
-      campoClave.value = rol.clave;
-      campoNombre.value = rol.nombre;
-      campoDescripcion.value = rol.descripcion || '';
-      selectorRol.value = rol.clave;
-      bloquearCampos(true);
-      pintarListas();
-      ocultarMsg();
+      var rol = rolesBase.find(function (r) { return r.clave === clave; });
+      if (!rol) { limpiar(); return; }
+      modo = 'consulta'; claveEdicion = rol.clave;
+      campoClave.value = rol.clave; campoNombre.value = rol.nombre; campoDescripcion.value = rol.descripcion || '';
+      selectorRol.value = rol.clave; bloquearCampos(true); pintarAccesos(); ocultarMensaje();
     }
-
     function iniciarNuevo() {
-      modo = 'nuevo';
-      claveEdicion = '';
-      campoClave.value = '';
-      campoNombre.value = '';
-      campoDescripcion.value = '';
-      selectorRol.value = '';
-      bloquearCampos(false);
-      pintarListas();
-      mostrarMsg('Captura la clave, el nombre y la descripción del rol, asigna usuarios y accesos, y pulsa Modif para guardar.', 'av');
-      campoClave.focus();
+      if (soloConsulta) return;
+      modo = 'nuevo'; claveEdicion = ''; campoClave.value = ''; campoNombre.value = ''; campoDescripcion.value = ''; selectorRol.value = '';
+      bloquearCampos(false); pintarAccesos(); mensaje('Captura una clave y nombre únicos, describe el rol y asigna permisos. Esto no crea ni cambia cuentas.', 'av'); campoClave.focus();
     }
-
     function habilitarEdicion() {
-      if (!claveEdicion) {
-        iniciarNuevo();
-        return;
-      }
-
-      modo = 'edicion';
-      bloquearCampos(false);
-      mostrarMsg('Modifica los datos del rol y pulsa Modif para guardar los cambios.', 'av');
-      campoNombre.focus();
-      campoNombre.select();
+      if (soloConsulta) return;
+      if (!claveEdicion) { iniciarNuevo(); return; }
+      modo = 'edicion'; bloquearCampos(false); mensaje('Edita los datos y permisos. Quitar permisos requiere confirmación.', 'av'); campoNombre.focus();
     }
-
-    function validarRol(nuevo) {
+    function validar(nuevo) {
       if (!nuevo.clave) return 'Captura la clave del rol.';
-      if (!/^[a-z0-9][a-z0-9_-]{1,29}$/i.test(nuevo.clave)) {
-        return 'La clave del rol debe tener de 2 a 30 caracteres (letras, números, guion o guion bajo).';
-      }
+      if (!/^[a-z0-9][a-z0-9_-]{1,29}$/i.test(nuevo.clave)) return 'La clave debe tener de 2 a 30 caracteres (letras, números, guion o guion bajo).';
       if (!nuevo.nombre) return 'Captura el nombre del rol.';
-
-      var claveRepetida = rolesBase.some(function (rol) {
-        return normalizar(rol.clave) === normalizar(nuevo.clave) && rol.clave !== claveEdicion;
-      });
-      if (claveRepetida) return 'Ya existe un rol con la clave "' + nuevo.clave + '".';
-
-      var nombreRepetido = rolesBase.some(function (rol) {
-        return normalizar(rol.nombre) === normalizar(nuevo.nombre) && rol.clave !== claveEdicion;
-      });
-      if (nombreRepetido) return 'Ya existe un rol con el nombre "' + nuevo.nombre + '".';
-
+      if (rolesBase.some(function (r) { return normalizar(r.clave) === normalizar(nuevo.clave) && r.clave !== claveEdicion; })) return 'La clave del rol ya existe.';
+      if (rolesBase.some(function (r) { return normalizar(r.nombre) === normalizar(nuevo.nombre) && r.clave !== claveEdicion; })) return 'El nombre del rol ya existe.';
       return '';
     }
-
+    function auditar(accion, rol) {
+      /* Bitácora de demostración en este navegador; no es auditoría compartida ni segura. */
+      try {
+        var clave = 'nz_auditoria_roles_demo';
+        var eventos = JSON.parse(localStorage.getItem(clave) || '[]');
+        eventos.push({ actor: sesion.usuario || 'sin-sesion', fecha: new Date().toISOString(), accion: accion, rol: rol });
+        localStorage.setItem(clave, JSON.stringify(eventos.slice(-100)));
+      } catch (e) { console.warn('No se pudo registrar la bitácora local de demostración.', e); }
+    }
     function guardarEdicion() {
-      var nuevos = {
-        clave: campoClave.value.trim(),
-        nombre: campoNombre.value.trim(),
-        descripcion: campoDescripcion.value.trim(),
-        accesos: valoresDe(listaAccesosDer)
-      };
-
-      var error = validarRol(nuevos);
-      if (error) {
-        mostrarMsg(error, 'er');
-        toast(error, 'error');
-        return;
-      }
-
-      var esAlta = modo === 'nuevo';
-      var miembrosNuevos = valoresDe(listaUsuariosDer);
-      var sesionCambio = '';
-
-      /* Misma confirmación que en "Asignación de roles": no se cambia ni se
-         quita el rol de la cuenta en sesión sin avisar al usuario. */
-      if (miembrosNuevos.indexOf(sesion.usuario) !== -1) {
-        if (normalizar(nuevos.nombre) !== normalizar(sesion.rol) &&
-            !window.confirm('Vas a cambiar el rol de la cuenta con la que iniciaste sesión (' +
-              sesion.rol + ' → ' + nuevos.nombre + '). ¿Deseas continuar?')) {
-          return;
-        }
-      } else if (miembrosOriginales.indexOf(sesion.usuario) !== -1) {
-        if (!window.confirm('Vas a quitar el rol de la cuenta con la que iniciaste sesión (' +
-          sesion.rol + '). Quedará como "Sin rol asignado". ¿Deseas continuar?')) {
-          return;
-        }
-      }
-
-      guardarRol(nuevos);
-
-      /* Asignación de usuarios: alta en el rol, baja de los que se quitan y
-         actualización del nombre en quienes permanecen (rol renombrado) */
-      miembrosNuevos.forEach(function (login) {
-        guardarCambioUsuario(login, { rol: nuevos.nombre });
-        if (login === sesion.usuario) sesionCambio = nuevos.nombre;
-      });
-
-      miembrosOriginales.forEach(function (login) {
-        if (miembrosNuevos.indexOf(login) !== -1) return;
-        guardarCambioUsuario(login, { rol: 'Sin rol asignado' });
-        if (login === sesion.usuario) sesionCambio = 'Sin rol asignado';
-      });
-
-      if (sesionCambio) sessionStorage.setItem('nz_rol', sesionCambio);
-
-      recargarRoles().then(function (resultados) {
-        rolesBase = resultados.roles;
-        recargar().then(function () {
-          cargarRol(nuevos.clave);
-          mostrarMsg(esAlta ? 'Rol "' + nuevos.nombre + '" creado.' : 'Rol "' + nuevos.nombre + '" actualizado.', 'ok');
-          toast(esAlta ? 'Rol creado correctamente.' : 'Rol actualizado correctamente.');
-        });
-      }).catch(function () {
-        mostrarMsg('No se pudieron guardar los cambios del rol.', 'er');
-      });
+      if (soloConsulta) { mensaje('Tu perfil no puede administrar roles.', 'er'); return; }
+      var nuevo = { clave: campoClave.value.trim(), nombre: campoNombre.value.trim(), descripcion: campoDescripcion.value.trim(), accesos: valores(listaAccesosDer) };
+      var error = validar(nuevo);
+      if (error) { mensaje(error, 'er'); toast(error, 'error'); return; }
+      var anterior = rolesBase.find(function (r) { return r.clave === claveEdicion; });
+      var removidos = anterior ? (anterior.accesos || []).filter(function (id) { return nuevo.accesos.indexOf(id) === -1; }) : [];
+      if (removidos.length && !window.confirm('Vas a retirar ' + removidos.length + ' permiso(s) del rol. ¿Confirmas el cambio?')) return;
+      var alta = modo === 'nuevo';
+      guardarRol(nuevo); auditar(alta ? 'crear' : (removidos.length ? 'editar_quitando_permisos' : 'editar'), nuevo.clave);
+      recargarRoles().then(function (resultado) {
+        rolesBase = resultado.roles; pintarSelector(); cargarRol(nuevo.clave);
+        mensaje(alta ? 'Rol creado. Las asignaciones de usuarios no cambiaron.' : 'Rol actualizado. Las asignaciones de usuarios no cambiaron.', 'ok');
+        toast(alta ? 'Rol creado correctamente.' : 'Rol actualizado correctamente.');
+      }).catch(function () { mensaje('No se pudieron guardar los cambios del rol.', 'er'); });
     }
-
     function borrarRolSeleccionado() {
-      if (!claveEdicion) {
-        mostrarMsg('Selecciona el rol que deseas eliminar con el campo "Rol a modificar".', 'er');
-        toast('Selecciona el rol que deseas eliminar.', 'error');
-        return;
-      }
-
-      if (miembrosOriginales.length) {
-        var mensaje = 'No se puede eliminar el rol: tiene ' + miembrosOriginales.length +
-          ' usuario(s) asignado(s). Quítalos primero con los botones < y <<.';
-        mostrarMsg(mensaje, 'er');
-        toast(mensaje, 'error');
-        return;
-      }
-
-      if (normalizar(sesion.rol) === normalizar(campoNombre.value)) {
-        mostrarMsg('No puedes eliminar el rol de la cuenta con la que iniciaste sesión.', 'er');
-        toast('No puedes eliminar el rol de la cuenta con la que iniciaste sesión.', 'error');
-        return;
-      }
-
-      var nombre = campoNombre.value || claveEdicion;
-      if (!window.confirm('¿Eliminar el rol "' + nombre + '"?')) return;
-
-      borrarRol(claveEdicion);
-
-      recargarRoles().then(function (resultados) {
-        rolesBase = resultados.roles;
-        recargar().then(function () {
-          limpiarTodo();
-          mostrarMsg('Rol eliminado.', 'ok');
-          toast('Rol eliminado.');
-        });
-      }).catch(function () {
-        mostrarMsg('No se pudo eliminar el rol.', 'er');
+      if (soloConsulta) return;
+      if (!claveEdicion) { mensaje('Selecciona el rol que deseas eliminar.', 'er'); return; }
+      var asignado = usuariosBase.some(function (u) {
+        return normalizar(u.rol) === normalizar((rolesBase.find(function (r) { return r.clave === claveEdicion; }) || {}).nombre) || normalizar(u.rol) === normalizar(claveEdicion);
       });
+      if (asignado) { mensaje('No se puede eliminar este rol porque todavía está asignado a una cuenta. Reasigna esas cuentas primero en “Asignación de roles a usuarios”.', 'er'); return; }
+      if (!window.confirm('¿Eliminar el rol “' + (campoNombre.value || claveEdicion) + '”?')) return;
+      borrarRol(claveEdicion); auditar('eliminar', claveEdicion);
+      recargarRoles().then(function (resultado) { rolesBase = resultado.roles; pintarSelector(); limpiar(); mensaje('Rol eliminado.', 'ok'); }).catch(function () { mensaje('No se pudo eliminar el rol.', 'er'); });
     }
-
-    function recargar() {
-      return cargarDatos().then(function (datos) {
-        usuariosBase = datos.usuarios.map(function (usuario) {
-          var persona = datos.mapaPersonas[usuario.idPersona];
-          var copia = {};
-          Object.keys(usuario).forEach(function (clave) { copia[clave] = usuario[clave]; });
-          copia.nombreCompleto = persona ? nombreCompletoDe(persona) : usuario.usuario;
-          return copia;
-        });
-        return usuariosBase;
-      });
+    function transferir(boton) {
+      if (soloConsulta || modo === 'consulta') { mensaje('Pulsa Nuevo o Modif para editar permisos.', 'av'); return; }
+      var derecha = boton.getAttribute('data-dir') === '1';
+      var origen = derecha ? listaAccesosIzq : listaAccesosDer;
+      var destino = derecha ? listaAccesosDer : listaAccesosIzq;
+      var todos = boton.getAttribute('data-todo') === '1';
+      var seleccion = Array.prototype.slice.call(origen.options).filter(function (o) { return todos || o.selected; });
+      if (!seleccion.length) { toast('Selecciona al menos un permiso.'); return; }
+      seleccion.forEach(function (o) { origen.removeChild(o); o.selected = false; destino.appendChild(o); });
+      ordena(origen); ordena(destino);
     }
-
-    selectorRol.addEventListener('change', function () {
-      if (!selectorRol.value) {
-        limpiarTodo();
-        return;
-      }
-      cargarRol(selectorRol.value);
-    });
-
-    Array.prototype.forEach.call(document.querySelectorAll('.btn-traslado'), function (boton) {
-      boton.addEventListener('click', function () {
-        if (modo === 'consulta') {
-          mostrarMsg('Pulsa Modif o Nuevo para modificar la asignación.', 'av');
-          return;
-        }
-
-        var esUsuarios = boton.getAttribute('data-lista') === 'usuarios';
-        var izquierda = esUsuarios ? listaUsuariosIzq : listaAccesosIzq;
-        var derecha = esUsuarios ? listaUsuariosDer : listaAccesosDer;
-        var aDerecha = boton.getAttribute('data-dir') === '1';
-        var todos = boton.getAttribute('data-todo') === '1';
-
-        var origen = aDerecha ? izquierda : derecha;
-        var destino = aDerecha ? derecha : izquierda;
-        var opciones = Array.prototype.slice.call(origen.options).filter(function (opcion) {
-          return todos || opcion.selected;
-        });
-
-        if (!opciones.length) {
-          toast('No hay elementos seleccionados para mover.');
-          return;
-        }
-
-        opciones.forEach(function (opcion) {
-          origen.removeChild(opcion);
-          opcion.selected = false;
-          destino.appendChild(opcion);
-        });
-
-        ordenar(origen);
-        ordenar(destino);
-      });
-    });
-
-    var botonNuevoRol = document.getElementById('t-nuevo');
-    var botonBorrarRol = document.getElementById('t-borrar');
-    var botonModificarRol = document.getElementById('t-modif');
-    var botonConsultarRol = document.getElementById('t-consul');
-    var botonCancelarRol = document.getElementById('t-cancel');
-    var botonSalirRoles = document.getElementById('t-salir');
-
-    if (botonNuevoRol) botonNuevoRol.addEventListener('click', iniciarNuevo);
-    if (botonBorrarRol) botonBorrarRol.addEventListener('click', borrarRolSeleccionado);
-    if (botonModificarRol) botonModificarRol.addEventListener('click', function () {
-      if (modo === 'consulta') habilitarEdicion();
-      else guardarEdicion();
-    });
-    if (botonConsultarRol) botonConsultarRol.addEventListener('click', function () {
-      if (!selectorRol.value) {
-        mostrarMsg('Selecciona el rol que deseas consultar.', 'er');
-        toast('Selecciona el rol que deseas consultar.', 'error');
-        return;
-      }
-      cargarRol(selectorRol.value);
-      mostrarMsg('Consulta del rol "' + campoNombre.value + '".', 'ok');
-    });
-    if (botonCancelarRol) botonCancelarRol.addEventListener('click', function () {
-      if (claveEdicion) cargarRol(claveEdicion);
-      else limpiarTodo();
-      toast('Operación cancelada.');
-    });
-    if (botonSalirRoles) {
-      botonSalirRoles.addEventListener('click', function () {
-        window.location.href = 'inicio.html';
-      });
-    }
-
-    Promise.all([cargarRoles(), cargarDatos()]).then(function (resultados) {
-      rolesBase = resultados[0].roles;
-      accesosBase = resultados[0].accesos;
-
-      return recargar().then(function () {
-        pintarSelector();
-        if (rolesBase.length) cargarRol(rolesBase[0].clave);
-        else limpiarTodo();
-      });
-    }).catch(function (error) {
-      console.error(error);
-      mostrarMsg('No se pudieron leer los roles y accesos del sistema. Verifica que el proyecto esté servido por un servidor local.', 'er');
-    });
+    selectorRol.addEventListener('change', function () { selectorRol.value ? cargarRol(selectorRol.value) : limpiar(); });
+    document.querySelectorAll('.btn-traslado[data-lista="accesos"]').forEach(function (b) { b.addEventListener('click', function () { transferir(b); }); });
+    var nuevo = document.getElementById('t-nuevo'), borrar = document.getElementById('t-borrar'), modificar = document.getElementById('t-modif');
+    var consultar = document.getElementById('t-consul'), cancelar = document.getElementById('t-cancel'), salir = document.getElementById('t-salir');
+    if (nuevo) nuevo.addEventListener('click', iniciarNuevo);
+    if (borrar) borrar.addEventListener('click', borrarRolSeleccionado);
+    if (modificar) modificar.addEventListener('click', function () { modo === 'consulta' ? habilitarEdicion() : guardarEdicion(); });
+    if (consultar) consultar.addEventListener('click', function () { selectorRol.value ? cargarRol(selectorRol.value) : mensaje('Selecciona un rol para consultar.', 'er'); });
+    if (cancelar) cancelar.addEventListener('click', function () { claveEdicion ? cargarRol(claveEdicion) : limpiar(); toast('Operación cancelada.'); });
+    if (salir) salir.addEventListener('click', function () { window.location.href = 'inicio.html'; });
+    Promise.all([cargarRoles(), cargarDatos()]).then(function (res) {
+      rolesBase = res[0].roles; accesosBase = res[0].accesos; usuariosBase = res[1].usuarios;
+      pintarSelector();
+      if (soloConsulta) mensaje('Acceso de consulta: no puedes crear, editar ni eliminar roles.', 'av');
+      if (rolesBase.length) cargarRol(rolesBase[0].clave); else limpiar();
+      if (soloConsulta) mensaje('Acceso de consulta: no puedes crear, editar ni eliminar roles.', 'av');
+    }).catch(function (error) { console.error(error); mensaje('No se pudieron leer los roles y accesos. Verifica que el proyecto esté servido por HTTP.', 'er'); });
   }
-
   initRolesAccesos();
 
   /* ------------------------------------------------------------------
@@ -4185,6 +3911,214 @@
       mostrarMsg('No se pudieron leer las aplicaciones del sistema. Verifica que el proyecto esté servido por un servidor local.', 'er');
     });
   }
+
+  function initConsultaTareasRecinto() {
+    var cuerpo = document.getElementById('tarea-resultados');
+    if (!cuerpo) return;
+    var filtros = {
+      recinto: document.getElementById('tarea-recinto'),
+      encargado: document.getElementById('tarea-encargado'),
+      desde: document.getElementById('tarea-desde'),
+      hasta: document.getElementById('tarea-hasta'),
+      estado: document.getElementById('tarea-estado')
+    };
+    var resumen = document.getElementById('tarea-resumen');
+    var tareas = [];
+    function isoFecha(texto) {
+      var m = String(texto || '').match(/(\d{2})\/(\d{2})\/(\d{4})/);
+      return m ? m[3] + '-' + m[2] + '-' + m[1] : '';
+    }
+    function leerPagina(ruta) {
+      return fetch(ruta, {cache:'no-store'}).then(function (r) { if (!r.ok) throw new Error(ruta); return r.text(); }).then(function (html) { return new DOMParser().parseFromString(html, 'text/html'); });
+    }
+    function contieneRecinto(texto, numero) {
+      var m = /Recinto\s+([^\n(]+)/i.exec(String(texto || ''));
+      return !!(m && (m[1].match(/\d+/g) || []).indexOf(String(numero)) !== -1);
+    }
+    function render() {
+      if (filtros.desde.value && filtros.hasta.value && filtros.desde.value > filtros.hasta.value) {
+        resumen.textContent = 'La fecha inicial no puede ser posterior a la fecha final.';
+        cuerpo.innerHTML = '<tr><td colspan="7">Corrige el periodo para consultar.</td></tr>';
+        return;
+      }
+      var rs = tareas.filter(function (t) {
+        if (filtros.recinto.value && normalizar(t.recinto).indexOf(normalizar(filtros.recinto.value)) === -1) return false;
+        if (filtros.encargado.value && normalizar(t.encargado).indexOf(normalizar(filtros.encargado.value)) === -1) return false;
+        if (filtros.desde.value && t.fecha < filtros.desde.value) return false;
+        if (filtros.hasta.value && t.fecha > filtros.hasta.value) return false;
+        if (filtros.estado.value && t.estado !== filtros.estado.value) return false;
+        return true;
+      });
+      cuerpo.innerHTML = '';
+      resumen.textContent = rs.length + ' tarea(s) de demostración coinciden con los filtros.';
+      if (!rs.length) { var tr=document.createElement('tr'), td=document.createElement('td'); td.colSpan=7; td.textContent='No hay resultados para esos filtros.'; tr.appendChild(td); cuerpo.appendChild(tr); return; }
+      rs.forEach(function (t) {
+        var tr=document.createElement('tr');
+        [t.recinto,t.encargado,t.turno + ' / ' + t.vigencia,t.tarea,t.estado,t.cierre,t.observaciones].forEach(function (valor) { var td=document.createElement('td'); td.textContent=valor || 'No registrado'; tr.appendChild(td); });
+        cuerpo.appendChild(tr);
+      });
+    }
+    Promise.all([leerPagina('operacion-supervision.html'), leerPagina('personal-turnos.html')]).then(function (docs) {
+      var doc=docs[0], asignaciones=docs[1];
+      var encabezado=doc.querySelector('.topbar .tit p');
+      var fecha=isoFecha(encabezado && encabezado.textContent);
+      var filas=doc.querySelectorAll('.contenido table')[0].rows;
+      var mapaAsignaciones={};
+      var tablaAsig=asignaciones.querySelectorAll('.contenido table')[0];
+      if (tablaAsig) Array.prototype.forEach.call(Array.from(tablaAsig.rows).slice(1),function(f){var c=f.cells;if(c.length>=6) mapaAsignaciones[c[0].textContent.trim()]=c[5].textContent.trim();});
+      var tablaTurnos=asignaciones.querySelectorAll('.contenido table')[1];
+      Array.prototype.forEach.call(Array.from(filas).slice(1),function(f){
+        var c=f.cells;if(c.length<9||!fecha)return;
+        var recinto='Recinto '+c[2].textContent.trim(), encargado=c[4].textContent.trim(), actual=c[1].textContent.trim();
+        var d=new Date(fecha+'T00:00:00'), hoy=new Date(); hoy.setHours(0,0,0,0);
+        var estado=actual==='—'?(d<hoy?'vencida':'pendiente'):'completada';
+        var turno='No registrado';
+        if(tablaTurnos){Array.prototype.forEach.call(Array.from(tablaTurnos.rows).slice(1),function(t){var texto=t.textContent; var n=recinto.match(/\d+/); if(n&&texto.indexOf(encargado)!==-1&&contieneRecinto(texto,n[0])) turno=t.cells[1].textContent.trim()+' · '+t.cells[2].textContent.trim();});}
+        tareas.push({fecha:fecha,recinto:recinto,encargado:encargado,turno:turno,vigencia:mapaAsignaciones[recinto]||'No registrado',tarea:c[3].textContent.trim()+' — '+c[0].textContent.trim(),estado:estado,cierre:actual==='—'?'No registrado':actual,observaciones:'No registrado en la fuente de demostración'});
+      });
+      render();
+    }).catch(function (e) { console.warn(e); resumen.textContent='No se pudieron leer las fuentes locales de demostración. Abre el proyecto con un servidor HTTP.'; cuerpo.innerHTML='<tr><td colspan="7">No se pudieron cargar registros.</td></tr>'; });
+    Object.keys(filtros).forEach(function (k) { filtros[k].addEventListener('input',render); filtros[k].addEventListener('change',render); });
+  }
+  initConsultaTareasRecinto();
+
+  function initCentroReportes() {
+    var tipoEl = document.getElementById('rep-tipo');
+    if (!tipoEl) return;
+    var desdeEl = document.getElementById('rep-desde');
+    var hastaEl = document.getElementById('rep-hasta');
+    var alcanceEl = document.getElementById('rep-alcance');
+    var recintoEl = document.getElementById('rep-recinto');
+    var especieEl = document.getElementById('rep-especie');
+    var ejemplarEl = document.getElementById('rep-ejemplar');
+    var resultadosEl = document.getElementById('rep-resultados');
+    var resumenEl = document.getElementById('rep-resumen');
+    var generadoEl = document.getElementById('rep-generado');
+    var pdfEl = document.getElementById('rep-pdf');
+    var csvEl = document.getElementById('rep-csv');
+    var rol = claveRol(leerSesion().rol);
+    var puedeVerClinico = rol === 'gerente' || rol === 'veterinario';
+    var datosActuales = [];
+    var tipos = {
+      consumo: [
+        { fecha:'2026-10-26', tipo:'Consumo', recinto:'Recinto 3', especie:'Jaguar', ejemplar:'Kia', detalle:'Carne de res; programado 2.5 kg, suministrado 2.5 kg, cumplimiento 100 %', responsable:'No registrado', observaciones:'Historial nutricional de demostración' },
+        { fecha:'2026-10-25', tipo:'Consumo', recinto:'Recinto 3', especie:'Jaguar', ejemplar:'Kia', detalle:'Carne de res; programado 2.5 kg, suministrado 1.8 kg, cumplimiento 72 %', responsable:'No registrado', observaciones:'Historial nutricional de demostración' },
+        { fecha:'2026-10-24', tipo:'Consumo', recinto:'Recinto 3', especie:'Jaguar', ejemplar:'Kia', detalle:'Carne de res; programado 2.5 kg, suministrado 2.5 kg, cumplimiento 100 %', responsable:'No registrado', observaciones:'Historial nutricional de demostración' }
+      ],
+      inventario: [
+        { fecha:'2026-10-26', tipo:'Merma', recinto:'No registrado', especie:'No registrado', ejemplar:'', detalle:'Carne de res; 2.5 kg; motivo: caducidad', responsable:'O. Bautista', observaciones:'No registrado' },
+        { fecha:'2026-10-25', tipo:'Merma', recinto:'No registrado', especie:'No registrado', ejemplar:'', detalle:'Plátano; 4.0 kg; motivo: daño en el manejo', responsable:'J. Chan', observaciones:'No registrado' },
+        { fecha:'2026-10-24', tipo:'Merma', recinto:'No registrado', especie:'No registrado', ejemplar:'', detalle:'Zacate (forraje); 6.0 kg; motivo: humedad en bodega', responsable:'L. Mendoza', observaciones:'No registrado' },
+        { fecha:'2026-10-23', tipo:'Merma', recinto:'No registrado', especie:'No registrado', ejemplar:'', detalle:'Mezcla de semillas; 1.2 kg; motivo: vencimiento', responsable:'Servicios generales', observaciones:'No registrado' }
+      ],
+      alimentacion: [
+        { fecha:'2026-10-27', tipo:'Alimentación', recinto:'Recinto 3', especie:'Jaguar', ejemplar:'Kia', detalle:'Programado 07:00; entregado 07:05; 2.5 kg de 2.5 kg; 100 %; a tiempo', responsable:'O. Bautista', observaciones:'Registro estático de demostración' },
+        { fecha:'2026-10-27', tipo:'Alimentación', recinto:'Recinto 12', especie:'Tapir', ejemplar:'Chia', detalle:'Programado 07:00; entregado 07:32; 4.0 kg de 4.0 kg; tarde 32 min', responsable:'J. Chan', observaciones:'Registro estático de demostración' },
+        { fecha:'2026-10-27', tipo:'Alimentación', recinto:'Recinto 5', especie:'Oso', ejemplar:'Bruno', detalle:'Programado 07:30; entregado 07:34; 1.2 kg de 1.2 kg; 100 %; a tiempo', responsable:'L. Mendoza', observaciones:'Registro estático de demostración' },
+        { fecha:'2026-10-27', tipo:'Alimentación', recinto:'Recinto 7', especie:'Loro corona azul', ejemplar:'No registrado', detalle:'Programado 08:00; sin hora real ni cantidad confirmada; sin confirmar', responsable:'L. Mendoza', observaciones:'No registrado' },
+        { fecha:'2026-10-27', tipo:'Alimentación', recinto:'Recinto 4', especie:'Tigre', ejemplar:'Nube', detalle:'Programado 10:00; entregado 09:58; 2.1 kg de 3.2 kg; cumplimiento 66 %; sobración 34 %', responsable:'O. Bautista', observaciones:'Registro estático de demostración' }
+      ],
+      salud: [
+        { fecha:'2026-10-24', tipo:'Vacunación', recinto:'No registrado', especie:'No registrado', ejemplar:'No registrado', detalle:'Antirrábica — dosis anual, sin reacciones', responsable:'Dra. N. Peña', observaciones:'Próximo control: 24/10/2027' },
+        { fecha:'2026-10-12', tipo:'Desparasitación', recinto:'No registrado', especie:'No registrado', ejemplar:'No registrado', detalle:'Ivermectina 1 mL IM — interno y externo', responsable:'Dra. N. Peña', observaciones:'Próximo control: 12/04/2027' },
+        { fecha:'2026-10-03', tipo:'Consulta', recinto:'No registrado', especie:'No registrado', ejemplar:'No registrado', detalle:'Laceración en pata trasera derecha — curación diaria', responsable:'Dra. N. Peña', observaciones:'Próximo control: 10/10/2026' },
+        { fecha:'2026-08-18', tipo:'Procedimiento quirúrgico', recinto:'No registrado', especie:'No registrado', ejemplar:'No registrado', detalle:'Esterilización — evolución sin complicaciones', responsable:'Dr. A. Ruiz', observaciones:'Próximo control: 18/08/2027' },
+        { fecha:'2026-06-05', tipo:'Chequeo preventivo', recinto:'No registrado', especie:'No registrado', ejemplar:'No registrado', detalle:'Examen físico y laboratorio rutinario: normal', responsable:'Dra. N. Peña', observaciones:'Próximo control: 05/12/2026' },
+        { fecha:'2026-10-25', tipo:'Cuarentena/observación', recinto:'No registrado', especie:'Loro corona azul', ejemplar:'Zola', detalle:'Pasteleosis sospechosa; aislada, apetito al 40 %, plumas erizadas', responsable:'No registrado', observaciones:'Alerta fuente: muestra el 28/10/2026 09:00; próximo control no registrado' },
+        { fecha:'2026-10-26', tipo:'Cuarentena/observación', recinto:'No registrado', especie:'Tigre', ejemplar:'Nube', detalle:'Postquirúrgico; estable, herida limpia y sin inflamación', responsable:'No registrado', observaciones:'Próximo control no registrado' },
+        { fecha:'2026-10-22', tipo:'Cuarentena/observación', recinto:'No registrado', especie:'Tapir centroamericano', ejemplar:'Chia', detalle:'Pérdida de peso del 6 %; consumo del 85 % de la ración, peso diario', responsable:'No registrado', observaciones:'Próximo control no registrado' }
+      ],
+      recintos: [
+        { fecha:'2026-10-01', fin:'2026-12-31', tipo:'Asignación de recinto', recinto:'Recinto 3', especie:'Jaguar, puma', ejemplar:'', detalle:'Encargado principal O. Bautista; suplente L. Mendoza; vigencia 01/10–31/12/2026', responsable:'O. Bautista', observaciones:'Turno no registrado en esta fila' },
+        { fecha:'2026-10-01', fin:'2026-12-31', tipo:'Asignación de recinto', recinto:'Recinto 4', especie:'Tigre', ejemplar:'', detalle:'Encargado principal O. Bautista; suplente L. Mendoza; vigencia 01/10–31/12/2026', responsable:'O. Bautista', observaciones:'Turno no registrado en esta fila' },
+        { fecha:'2026-10-01', fin:'2026-12-31', tipo:'Asignación de recinto', recinto:'Recinto 7', especie:'Loro corona azul, guacamaya', ejemplar:'', detalle:'Encargado principal L. Mendoza; suplente J. Chan; vigencia 01/10–31/12/2026', responsable:'L. Mendoza', observaciones:'Turno no registrado en esta fila' },
+        { fecha:'2026-10-01', fin:'2026-12-31', tipo:'Asignación de recinto', recinto:'Recinto 12', especie:'Tapir centroamericano, pecarí', ejemplar:'', detalle:'Encargado principal J. Chan; suplente R. Aguilar; vigencia 01/10–31/12/2026', responsable:'J. Chan', observaciones:'Turno no registrado en esta fila' }
+      ]
+    };
+    tipos.oficiales = [].concat(tipos.consumo, tipos.inventario, tipos.alimentacion, puedeVerClinico ? tipos.salud : [], tipos.recintos);
+    var opcionClinica = document.getElementById('rep-tipo').querySelector('option[value="salud"]');
+    var opcionOficial = document.getElementById('rep-tipo').querySelector('option[value="oficiales"]');
+    if (opcionClinica && !puedeVerClinico) { opcionClinica.disabled = true; opcionClinica.textContent += ' (solo Gerente / Médico Veterinario)'; }
+    if (opcionOficial && !puedeVerClinico) { opcionOficial.textContent += ' (sin registros clínicos)'; }
+    function fechaValida(valor) { return /^\d{4}-\d{2}-\d{2}$/.test(valor) && !isNaN(Date.parse(valor)); }
+    function filtrar(registros, desde, hasta) {
+      var recinto = normalizar(recintoEl.value);
+      var especie = normalizar(especieEl.value);
+      var ejemplar = normalizar(ejemplarEl.value);
+      return registros.filter(function (r) {
+        var fin = r.fin || r.fecha;
+        if (fin < desde || r.fecha > hasta) return false;
+        if (alcanceEl.value === 'recinto' && !recinto) return false;
+        if (recinto && normalizar(r.recinto).indexOf(recinto) === -1) return false;
+        if (especie && normalizar(r.especie).indexOf(especie) === -1) return false;
+        if (ejemplar && normalizar(r.ejemplar).indexOf(ejemplar) === -1) return false;
+        return true;
+      });
+    }
+    function escaparCsv(valor) { return '"' + String(valor == null ? '' : valor).replace(/"/g, '""') + '"'; }
+    function invalidarPreview(texto) {
+      datosActuales = []; pdfEl.disabled = true; csvEl.disabled = true;
+      resultadosEl.innerHTML = '';
+      var fila = document.createElement('tr'); var celda = document.createElement('td'); celda.colSpan = 7; celda.textContent = 'Genera una vista previa válida para consultar resultados.'; fila.appendChild(celda); resultadosEl.appendChild(fila);
+      resumenEl.textContent = 'Sin vista previa vigente.'; generadoEl.textContent = texto;
+    }
+    function pintar(registros, filtros) {
+      datosActuales = registros;
+      resultadosEl.innerHTML = '';
+      pdfEl.disabled = !registros.length; csvEl.disabled = !registros.length;
+      var ahora = new Date().toLocaleString('es-MX');
+      var etiquetaTipo = tipoEl.options[tipoEl.selectedIndex].text;
+      var criterios = 'Tipo: ' + etiquetaTipo + ' · Periodo: ' + filtros.desde + ' a ' + filtros.hasta + ' · Alcance: ' + (alcanceEl.value === 'parque' ? 'parque' : 'recinto ' + recintoEl.value) + (especieEl.value ? ' · Especie: ' + especieEl.value : '') + (ejemplarEl.value ? ' · Ejemplar: ' + ejemplarEl.value : '');
+      resumenEl.textContent = criterios + ' · Generado: ' + ahora + ' · ' + registros.length + ' resultado(s).';
+      generadoEl.textContent = 'Vista previa basada en datos estáticos de ejemplo; no constituye historial de reportes ni una consulta a una base de datos.';
+      if (!registros.length) {
+        var vacia = document.createElement('tr'); var celda = document.createElement('td'); celda.colSpan = 7; celda.textContent = 'No hay resultados para el periodo y filtros seleccionados.'; vacia.appendChild(celda); resultadosEl.appendChild(vacia); return;
+      }
+      registros.forEach(function (r) {
+        var fila = document.createElement('tr');
+        [r.fecha.split('-').reverse().join('/'), r.tipo, r.recinto || 'No registrado', [r.especie || 'No registrado', r.ejemplar ? '— ' + r.ejemplar : ''].filter(Boolean).join(' '), r.detalle || 'No registrado', r.responsable || 'No registrado', r.observaciones || 'No registrado'].forEach(function (v) { var td = document.createElement('td'); td.textContent = v; fila.appendChild(td); });
+        resultadosEl.appendChild(fila);
+      });
+    }
+    function aplicarRutaReporte() {
+      var hash = (window.location.hash || '').replace(/^#/, '').toLowerCase();
+      var mapeo = { consumo:'consumo', alimentacion:'alimentacion', inventario:'inventario', oficiales:'oficiales' };
+      if (mapeo[hash] && tipoEl.value !== mapeo[hash]) {
+        tipoEl.value = mapeo[hash];
+        if (datosActuales.length || resumenEl.textContent !== 'Aún no se ha generado un reporte.') {
+          invalidarPreview('El tipo cambió desde el menú. Genera una vista previa nueva antes de exportar.');
+        }
+      }
+      if (hash) {
+        var destino = document.getElementById(hash) || document.getElementById('centro');
+        if (destino && typeof destino.scrollIntoView === 'function') destino.scrollIntoView({block:'start'});
+      }
+    }
+    aplicarRutaReporte();
+    window.addEventListener('hashchange', aplicarRutaReporte);
+    var generar = document.getElementById('rep-generar');
+    if (generar) generar.addEventListener('click', function () {
+      var desde = desdeEl.value, hasta = hastaEl.value;
+      if (!fechaValida(desde) || !fechaValida(hasta)) { invalidarPreview('Selecciona una fecha inicial y final válidas.'); desdeEl.focus(); return; }
+      if (desde > hasta) { invalidarPreview('La fecha inicial no puede ser posterior a la fecha final.'); hastaEl.focus(); return; }
+      if (alcanceEl.value === 'recinto' && !recintoEl.value.trim()) { invalidarPreview('Indica el recinto para aplicar ese alcance.'); recintoEl.focus(); return; }
+      if (tipoEl.value === 'salud' && !puedeVerClinico) { invalidarPreview('La consulta clínica está limitada en esta maqueta a Gerente / Médico Veterinario; el control real requiere backend.'); return; }
+      pintar(filtrar(tipos[tipoEl.value] || [], desde, hasta), {desde:desde, hasta:hasta});
+    });
+    [tipoEl, desdeEl, hastaEl, alcanceEl, recintoEl, especieEl, ejemplarEl].forEach(function (el) {
+      el.addEventListener('input', function () { if (datosActuales.length || resumenEl.textContent !== 'Aún no se ha generado un reporte.') invalidarPreview('Los filtros cambiaron. Genera una vista previa nueva antes de exportar.'); });
+      el.addEventListener('change', function () { if (datosActuales.length || resumenEl.textContent !== 'Aún no se ha generado un reporte.') invalidarPreview('Los filtros cambiaron. Genera una vista previa nueva antes de exportar.'); });
+    });
+    if (pdfEl) pdfEl.addEventListener('click', function () { if (datosActuales.length) window.print(); });
+    if (csvEl) csvEl.addEventListener('click', function () {
+      if (!datosActuales.length) return;
+      var filas = [['Fecha','Tipo','Recinto','Especie / ejemplar','Detalle / resultado','Profesional / encargado','Próximo control / observaciones']];
+      Array.prototype.forEach.call(resultadosEl.querySelectorAll('tr'), function (tr) { filas.push(Array.prototype.map.call(tr.cells, function (td) { return td.textContent; })); });
+      var csv = '\ufeffsep=;\r\n' + filas.map(function (f) { return f.map(escaparCsv).join(';'); }).join('\r\n');
+      var enlace = document.createElement('a'); enlace.href = URL.createObjectURL(new Blob([csv], {type:'text/csv;charset=utf-8'})); enlace.download = 'nutrizoo-reporte-' + tipoEl.value + '-' + desdeEl.value + '-' + hastaEl.value + '.csv'; enlace.click(); setTimeout(function () { URL.revokeObjectURL(enlace.href); }, 1000);
+    });
+  }
+  initCentroReportes();
 
   initAplicaciones();
 })();

@@ -1,0 +1,10 @@
+# Relación mUsuarios (maqueta estática; no usar contraseñas fuera de pruebas locales)
+# Formato: usuario|contrasena|rol|id_persona|estado|fecIni|fecFin
+# id_rol no forma parte del formato que consume el proyecto; se conserva el rol textual existente.
+# Mapeo inicial adaptado desde los puestos: id_rol 1 y 2 -> Recinto; 3 y 5 -> Mantenimiento; 4 -> Médico Veterinario.
+# Excepción solicitada: Bra18Yan04+ tiene rol Gerente / Administrador; su puesto personal sigue siendo Mantenimiento.
+Mau20Jos04+|Mau06Jes05Nin26*|Encargado de Recinto|1|true|28/11/2026|30/11/2026
+Bra18Yan04+|Bra07Ros05Car26*|Gerente / Administrador|2|true|25/11/2026|30/11/2026
+Tri10Cam05*|Tri10Cam05Dal26*|Médico Veterinario|3|true|20/11/2026|30/11/2026
+Pol10Sim05*|Pol10Sim05Sol26*|Encargado de Mantenimiento|4|true|20/11/2026|30/12/2026
+Gua10Lla05*|Gua10Lla05Alf26*|Encargado de Recinto|5|true|10/11/2026|20/12/2026

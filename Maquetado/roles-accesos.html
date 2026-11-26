@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>1.1 Roles y accesos · NutriZoo LT</title>
+<title>1.1 Creación de roles y permisos · NutriZoo LT</title>
 <link href="assets/css/estilos.css" rel="stylesheet"/>
 </head>
 <body data-modulo="1" data-pantalla="roles-accesos" data-requiere-sesion="">
@@ -16,8 +16,8 @@
 <div class="topbar-izq">
 <button aria-expanded="false" aria-label="Abrir menú" class="hamburguesa" type="button">☰</button>
 <div class="tit">
-<h1>1.1 Roles y accesos</h1>
-<p>Grupos de usuarios y permisos por módulo</p>
+<h1>1.1 Creación de roles y permisos</h1>
+<p>Define roles y permisos; la asignación a cuentas se administra por separado.</p>
 </div>
 </div>
 <div class="usuario">
@@ -34,11 +34,11 @@
 <div class="card">
 <div class="roles-cabecera">
 <div class="campo">
-<label for="rol-selector">Rol a modificar</label>
+<label for="rol-selector">Rol a consultar o editar</label>
 <select id="rol-selector"><option value="">Seleccione un rol</option></select>
 </div>
 <div class="campo">
-<label for="rol-clave">Clave del rol</label>
+<label for="rol-clave">Clave única del rol</label>
 <input autocomplete="off" id="rol-clave" maxlength="30" readonly spellcheck="false" type="text"/>
 </div>
 <div class="campo">
@@ -53,41 +53,23 @@
 
 <div class="roles-cuerpo">
 <div class="roles-listas">
-
 <div class="traslado">
 <div class="traslado-lista">
-<h4>USUARIO(S)/GRUPO(S)</h4>
-<select id="usuarios-disponibles" multiple size="8"></select>
+<h4>PERMISOS DISPONIBLES</h4>
+<select id="accesos-disponibles" multiple size="12" aria-label="Permisos disponibles"></select>
 </div>
 <div class="traslado-botones">
-<button class="btn-traslado" data-dir="1" data-lista="usuarios" data-todo="0" title="Mover la selección a la derecha" type="button">&gt;</button>
-<button class="btn-traslado" data-dir="1" data-lista="usuarios" data-todo="1" title="Mover todos a la derecha" type="button">&gt;&gt;</button>
-<button class="btn-traslado" data-dir="-1" data-lista="usuarios" data-todo="0" title="Mover la selección a la izquierda" type="button">&lt;</button>
-<button class="btn-traslado" data-dir="-1" data-lista="usuarios" data-todo="1" title="Mover todos a la izquierda" type="button">&lt;&lt;</button>
+<button class="btn-traslado" data-dir="1" data-lista="accesos" data-todo="0" title="Asignar permisos seleccionados" type="button">&gt;</button>
+<button class="btn-traslado" data-dir="1" data-lista="accesos" data-todo="1" title="Asignar todos los permisos" type="button">&gt;&gt;</button>
+<button class="btn-traslado" data-dir="-1" data-lista="accesos" data-todo="0" title="Retirar permisos seleccionados" type="button">&lt;</button>
+<button class="btn-traslado" data-dir="-1" data-lista="accesos" data-todo="1" title="Retirar todos los permisos" type="button">&lt;&lt;</button>
 </div>
 <div class="traslado-lista">
-<h4>USUARIO SELECC.</h4>
-<select id="usuarios-asignados" multiple size="8"></select>
+<h4>PERMISOS DEL ROL</h4>
+<select id="accesos-asignados" multiple size="12" aria-label="Permisos asignados al rol"></select>
 </div>
 </div>
-
-<div class="traslado">
-<div class="traslado-lista">
-<h4>ACCESOS</h4>
-<select id="accesos-disponibles" multiple size="8"></select>
-</div>
-<div class="traslado-botones">
-<button class="btn-traslado" data-dir="1" data-lista="accesos" data-todo="0" title="Mover la selección a la derecha" type="button">&gt;</button>
-<button class="btn-traslado" data-dir="1" data-lista="accesos" data-todo="1" title="Mover todos a la derecha" type="button">&gt;&gt;</button>
-<button class="btn-traslado" data-dir="-1" data-lista="accesos" data-todo="0" title="Mover la selección a la izquierda" type="button">&lt;</button>
-<button class="btn-traslado" data-dir="-1" data-lista="accesos" data-todo="1" title="Mover todos a la izquierda" type="button">&lt;&lt;</button>
-</div>
-<div class="traslado-lista">
-<h4>ACCESO ASIGN.</h4>
-<select id="accesos-asignados" multiple size="8"></select>
-</div>
-</div>
-
+<p class="tabla-pie">Crear o editar un rol no asigna ni cambia roles de usuarios. Para asignaciones usa “Asignación de roles a usuarios”.</p>
 </div>
 
 <aside class="tareas" aria-label="Tareas">

@@ -18,26 +18,22 @@ Luego abre <http://localhost:8000/login.html>.
 
 ## Cuentas de prueba
 
-| Login | PassWord | Rol | Estado |
-|---|---|---|---|
-| `Joh12Man05$nm` | `Ger12abc34Def56@` | Gerente / Administrador | vigente |
-| `Nor23Pen45@lp` | `Vet90vax11Bcd22*` | Médico Veterinario | vigente |
-| `Oma12Rec78*om` | `Rec34ani56Mno78+` | Encargado de Recinto | vigente |
-| `Mar45Mto90+cr` | `Mto01fij23Pqr45$` | Encargado de Mantenimiento | vigente |
-| `Pro20Mot04+` | `Pro20Mot04Bar26+` | Gerente / Administrador | inicia en el futuro |
-| `Pro24Mot04+` | `Pro24Mot04Bar26+` | Gerente / Administrador | cuenta desactivada |
-| `Pro18Mot04+` | `Pro18Mot04Bar26+` | Gerente / Administrador | vigencia vencida |
+| Login | Contraseña inicial | Rol | Vigencia (desde–hasta) | Estado al 26/11/2026 |
+|---|---|---|---|---|
+| `Mau20Jos04+` | `Mau06Jes05Nin26*` | Encargado de Recinto | 28/11/2026–30/11/2026 | Pendiente de activar |
+| `Bra18Yan04+` | `Bra07Ros05Car26*` | Gerente / Administrador | 25/11/2026–30/11/2026 | Vigente |
+| `Tri10Cam05*` | `Tri10Cam05Dal26*` | Médico Veterinario | 20/11/2026–30/11/2026 | Vigente |
+| `Pol10Sim05*` | `Pol10Sim05Sol26*` | Encargado de Mantenimiento | 20/11/2026–30/12/2026 | Vigente |
+| `Gua10Lla05*` | `Gua10Lla05Alf26*` | Encargado de Recinto | 10/11/2026–20/12/2026 | Vigente |
 
-> Las contraseñas están **en texto plano a propósito**: al no existir backend,
-> cualquier cifrado sería cosmético y daría una falsa sensación de seguridad.
-> Es una maqueta de datos de prueba, no un sistema en producción.
+> Son credenciales iniciales de demostración en texto plano; no se deben reutilizar fuera de pruebas locales ni en producción. El proyecto no tiene backend ni almacén seguro de contraseñas.
 
 ## Archivos de datos (fuente base)
 
 | Archivo | Formato | Relación |
 |---|---|---|
-| `personas.txt` | `id_persona\|nombres\|ap_p\|ap_m\|puesto\|correo\|telefono` | mPersonas |
-| `usuarios.txt` | `login\|password\|rol\|id_persona\|estado\|fec_ini\|fec_fin` | mUsuarios |
+| `mDatosPersonales.txt` | `id_persona\|nombres\|ap_p\|ap_m\|puesto\|correo\|telefono` | mDatosPersonales |
+| `mUsuarios.txt` | `login\|password\|rol\|id_persona\|estado\|fec_ini\|fec_fin` | mUsuarios |
 | `roles.txt` | `clave_rol\|nombre\|descripcion\|accesos` | mRoles |
 | `accesos.txt` | `id_acceso\|modulo\|operacion\|nombre` | mAccesos |
 | `aplicaciones.txt` | `clave\|descripcion` | mAplicaciones |
@@ -51,25 +47,38 @@ estado original.
 
 ## Pantallas: funcionales vs. maqueta
 
-Los botones marcados con `data-real` ejecutan lógica real; el resto responde
-**"Acción no disponible."** (30 funcionales / 179 visuales).
+Los botones marcados con `data-real` ejecutan lógica local de la maqueta; otras pantallas usan datos estáticos de ejemplo. Esto no implica persistencia compartida ni seguridad de servidor.
 
 | Pantalla | Estado |
 |---|---|
 | `login.html` | **Funcional** — validación de formato, vigencia, bloqueo por intentos |
 | `cambiar-password.html` | **Funcional** — reglas de PassWord y unicidad |
-| `roles-accesos.html` | **Funcional** — altas/bajas de roles y asignaciones |
+| `roles-accesos.html` | **Funcional en navegador** — creación/edición/baja de roles y permisos, separada de asignaciones |
 | `seguridad-roles.html` | **Funcional** — asignación de roles por usuario |
 | `seguridad-usuarios.html` | **Funcional** — cuentas, bitácora, alta de personas |
 | `seguridad-aplicaciones.html` | **Funcional** — CRUD de aplicaciones |
 | `catalogo-mantenimiento.html` | **Funcional** — CRUD de catálogos |
 | `mi-perfil.html` | **Lectura real** — datos de la sesión en curso |
+| `reportes-oficiales.html` | **Vista previa local** — filtros y exportación de filas demo a imprimir/CSV |
+| `gerente-tareas-recintos.html` | **Consulta local** — filtra filas estáticas de supervisión |
+| `configuracion.html#respaldo` | Restauración deshabilitada; no hay base de datos |
 | `index.html`, `inicio.html` | Sólo navegación |
-| El resto (21 pantallas) | **Maqueta visual** — tablas y formularios estáticos |
+| El resto | **Maqueta visual** — tablas y formularios estáticos |
 
 Detalle por página de botones `data-real`: `cambiar-password` 2,
 `catalogo-mantenimiento` 6, `roles-accesos` 6, `seguridad-aplicaciones` 6,
-`seguridad-roles` 4, `seguridad-usuarios` 6.
+`seguridad-roles` 4, `seguridad-usuarios` 6. Los reportes y la vista de tareas no guardan un historial de generación/edición.
+
+## Mejoras en la rama `agent/nutrizoo-consolidated-improvements`
+
+- Los enlaces de reportes llevan a un centro común con filtros de periodo y vista previa. El origen actual son filas estáticas de demostración; la exportación disponible es imprimir/guardar como PDF desde el navegador y CSV compatible con Excel. No equivale a reportes transaccionales ni registra auditoría en servidor.
+- `roles-accesos.html` administra la definición de roles y permisos; `seguridad-roles.html` conserva la asignación explícita de roles a cuentas. El editor ya no cambia asignaciones al editar un rol. Su almacenamiento y bitácora son locales al navegador, no controles de seguridad de producción.
+- `gerente-tareas-recintos.html` ofrece consulta filtrable, sólo para Gerente en la interfaz, usando los ejemplos existentes de supervisión de alimentación. No hay tareas guardadas ni acceso seguro de servidor.
+- La sección de respaldo/restauración está deshabilitada intencionalmente: no existe una base de datos real que restaurar.
+- Los accesos a información clínica se limitan visualmente a Gerente/Médico Veterinario, pero una maqueta sin backend no puede garantizar confidencialidad ni auditoría.
+- `mDatosPersonales.txt` y `mUsuarios.txt` contienen exclusivamente las cinco filas proporcionadas; los roles numéricos se expresan con las claves/nombres que ya reconoce el lector, salvo el rol administrador asignado a `Bra18Yan04+` por solicitud. Su puesto personal sigue siendo Encargado de Mantenimiento. Correo y teléfono quedan vacíos porque no se proporcionaron.
+
+Estas pantallas no sustituyen la implementación de backend, base de datos, autenticación, permisos ni bitácora.
 
 ## Modelo de permisos
 
@@ -101,5 +110,5 @@ Se conservan tal cual porque replican los mensajes del sistema que se modela:
 ## Control de versiones
 
 - Rama base: `main` (estado original de la maqueta).
-- Rama de trabajo: `mejoras/auditoria-frontend` (correcciones de la auditoría).
-  **No se hace `merge` a `main` sin revisión previa.**
+- Rama de trabajo de estas mejoras: `agent/nutrizoo-consolidated-improvements` (creada desde la rama activa al iniciar el trabajo).
+  **No se hace `merge` a la rama principal sin revisión previa.**
