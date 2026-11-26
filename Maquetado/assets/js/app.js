@@ -1340,10 +1340,10 @@
     var cajaError = document.getElementById('login-error');
     var verClave = document.getElementById('ver-clave');
     var enviando = false;
+    var temporizadorError = null;
 
     function mostrarError(mensaje, detalles) {
       if (!cajaError) {
-        toast(mensaje, 'error');
         return;
       }
 
@@ -1366,9 +1366,13 @@
       });
 
       cajaError.hidden = false;
+      if (temporizadorError) window.clearTimeout(temporizadorError);
+      temporizadorError = window.setTimeout(limpiarError, 5000);
     }
 
     function limpiarError() {
+      if (temporizadorError) window.clearTimeout(temporizadorError);
+      temporizadorError = null;
       if (!cajaError) return;
       cajaError.innerHTML = '';
       cajaError.hidden = true;
@@ -1409,7 +1413,6 @@
       var bloqueo = bloqueoPorIntentos(usuarioEscrito);
       if (bloqueo) {
         mostrarError(bloqueo);
-        toast('Demasiados intentos fallidos.', 'error');
         return;
       }
 
@@ -1431,7 +1434,6 @@
         mostrarError('login o Password, incorrecto', detallesFormato);
         campoContrasena.value = '';
         campoContrasena.focus();
-        toast('No fue posible iniciar sesión.', 'error');
         return;
       }
 
@@ -1486,7 +1488,6 @@
           mostrarError('login o Password, incorrecto', detalles);
           campoContrasena.value = '';
           campoContrasena.focus();
-          toast('No fue posible iniciar sesión.', 'error');
           return;
         }
 
@@ -1506,7 +1507,6 @@
           mostrarError('login o Password, incorrecto', detallesFallo);
           campoContrasena.value = '';
           campoContrasena.focus();
-          toast('No fue posible iniciar sesión.', 'error');
           return;
         }
 
@@ -1518,7 +1518,6 @@
           mostrarError(vigencia.mensaje);
           campoContrasena.value = '';
           campoContrasena.focus();
-          toast(vigencia.mensaje, 'error');
           return;
         }
 
@@ -1528,7 +1527,6 @@
           mostrarError('El usuario "' + encontrado.usuario + '" no tiene una persona asociada en mDatosPersonales.txt. Agrega el id_persona del usuario y vuelve a intentarlo.');
           campoContrasena.value = '';
           campoContrasena.focus();
-          toast('Usuario sin persona asociada.', 'error');
           return;
         }
 
@@ -1545,7 +1543,6 @@
       }).catch(function (error) {
         console.error(error);
         mostrarError('No se pudieron leer mDatosPersonales.txt y mUsuarios.txt. Abre el proyecto con un servidor local (Live Server o "python -m http.server") e inténtalo de nuevo.');
-        toast('Error al cargar los archivos de personas y usuarios.', 'error');
       }).then(function () {
         enviando = false;
         if (botonLogin) {
@@ -3912,6 +3909,76 @@
     });
   }
 
+  function initResumenAccesosGerente() {
+    var selector = document.getElementById('gerente-filtro-rol');
+    var contenedor = document.getElementById('gerente-modulos');
+    if (!selector || !contenedor) return;
+
+    function renderizar(roles) {
+      selector.innerHTML = '<option value="">Selecciona un puesto</option>';
+      roles.forEach(function (rol) {
+        var opcion = document.createElement('option');
+        opcion.value = rol.clave;
+        opcion.textContent = rol.nombre;
+        selector.appendChild(opcion);
+      });
+      selector.addEventListener('change', pintar);
+      pintar();
+    }
+
+    function pintar() {
+      contenedor.innerHTML = '';
+      var rolClave = selector.value;
+      var rol = rolDeClaveONombre(rolClave);
+      if (!rol) {
+        var ayuda = document.createElement('p');
+        ayuda.className = 'tabla-pie';
+        ayuda.textContent = 'Elige un puesto para consultar sus accesos.';
+        contenedor.appendChild(ayuda);
+        return;
+      }
+      MENU.filter(function (modulo) { return modulo.modulo && String(modulo.modulo) !== '0'; }).forEach(function (modulo) {
+        var operaciones = operacionesDeRolEnModulo(rol.clave, modulo.modulo);
+        var nombres = Object.keys(operaciones);
+        if (!nombres.length) return;
+        var tarjeta = document.createElement('article');
+        tarjeta.className = 'gerente-modulo';
+        var encabezado = document.createElement('div');
+        encabezado.className = 'gerente-modulo-titulo';
+        var titulo = document.createElement('strong');
+        titulo.textContent = modulo.etiqueta;
+        var nivel = document.createElement('span');
+        nivel.className = 'tag ' + (nombres.some(function (n) { return n !== 'Consulta'; }) ? 'verde' : 'azul');
+        nivel.textContent = nombres.some(function (n) { return n !== 'Consulta'; }) ? 'Completo' : 'Consulta';
+        encabezado.appendChild(titulo);
+        encabezado.appendChild(nivel);
+        tarjeta.appendChild(encabezado);
+        var detalle = document.createElement('p');
+        detalle.textContent = 'Permisos: ' + nombres.join(', ');
+        tarjeta.appendChild(detalle);
+        var vistas = (modulo.submenu || []).filter(function (vista) { return !vista.soloRol || vista.soloRol === rol.clave; });
+        if (vistas.length) {
+          var lista = document.createElement('p');
+          lista.className = 'gerente-vistas';
+          lista.textContent = 'Vistas: ' + vistas.map(function (vista) { return vista.etiqueta; }).join(' · ');
+          tarjeta.appendChild(lista);
+        }
+        contenedor.appendChild(tarjeta);
+      });
+      if (!contenedor.children.length) {
+        var vacio = document.createElement('p');
+        vacio.className = 'tabla-pie';
+        vacio.textContent = 'Este puesto no tiene módulos asignados.';
+        contenedor.appendChild(vacio);
+      }
+    }
+
+    cargarRoles().then(function (datos) { renderizar(datos.roles); }).catch(function () {
+      contenedor.textContent = 'No se pudieron cargar los roles y accesos. Abre el proyecto mediante un servidor HTTP.';
+    });
+  }
+  initResumenAccesosGerente();
+
   function initConsultaTareasRecinto() {
     var cuerpo = document.getElementById('tarea-resultados');
     if (!cuerpo) return;
@@ -3920,10 +3987,13 @@
       encargado: document.getElementById('tarea-encargado'),
       desde: document.getElementById('tarea-desde'),
       hasta: document.getElementById('tarea-hasta'),
-      estado: document.getElementById('tarea-estado')
+      estado: document.getElementById('tarea-estado'),
+      puesto: document.getElementById('tarea-puesto')
     };
     var resumen = document.getElementById('tarea-resumen');
+    var resumenPuestos = document.getElementById('tarea-resumen-puestos');
     var tareas = [];
+    var personal = [];
     function isoFecha(texto) {
       var m = String(texto || '').match(/(\d{2})\/(\d{2})\/(\d{4})/);
       return m ? m[3] + '-' + m[2] + '-' + m[1] : '';
@@ -3934,6 +4004,36 @@
     function contieneRecinto(texto, numero) {
       var m = /Recinto\s+([^\n(]+)/i.exec(String(texto || ''));
       return !!(m && (m[1].match(/\d+/g) || []).indexOf(String(numero)) !== -1);
+    }
+    function esPendiente(tarea) {
+      return tarea.estado === 'pendiente' || tarea.estado === 'en curso' || tarea.estado === 'vencida';
+    }
+    function pintarResumenPuestos() {
+      if (!resumenPuestos) return;
+      resumenPuestos.innerHTML = '';
+      var puestos = [];
+      personal.forEach(function (persona) {
+        var nombrePuesto = persona.puesto || 'Puesto no registrado';
+        if (!puestos.some(function (p) { return normalizar(p) === normalizar(nombrePuesto); })) puestos.push(nombrePuesto);
+      });
+      puestos.forEach(function (puesto) {
+        var personasPuesto = personal.filter(function (p) { return normalizar(p.puesto || 'Puesto no registrado') === normalizar(puesto); });
+        var tareasPuesto = tareas.filter(function (t) { return normalizar(t.puesto) === normalizar(puesto); });
+        var tarjeta = document.createElement('article');
+        tarjeta.className = 'gerente-puesto';
+        var nombre = document.createElement('strong');
+        nombre.textContent = puesto;
+        var cantidad = document.createElement('span');
+        cantidad.className = 'gerente-pendientes';
+        cantidad.textContent = String(tareasPuesto.filter(esPendiente).length);
+        var pie = document.createElement('small');
+        pie.textContent = personasPuesto.map(nombreCompletoDe).filter(Boolean).join(', ') + ' · ' + tareasPuesto.length + ' tarea(s) de demostración';
+        tarjeta.appendChild(nombre);
+        tarjeta.appendChild(cantidad);
+        tarjeta.appendChild(pie);
+        resumenPuestos.appendChild(tarjeta);
+      });
+      if (!puestos.length) resumenPuestos.textContent = 'No se encontraron puestos en mDatosPersonales.txt.';
     }
     function render() {
       if (filtros.desde.value && filtros.hasta.value && filtros.desde.value > filtros.hasta.value) {
@@ -3947,19 +4047,20 @@
         if (filtros.desde.value && t.fecha < filtros.desde.value) return false;
         if (filtros.hasta.value && t.fecha > filtros.hasta.value) return false;
         if (filtros.estado.value && t.estado !== filtros.estado.value) return false;
+        if (filtros.puesto.value && normalizar(t.puesto) !== normalizar(filtros.puesto.value)) return false;
         return true;
       });
       cuerpo.innerHTML = '';
-      resumen.textContent = rs.length + ' tarea(s) de demostración coinciden con los filtros.';
+      resumen.textContent = rs.length + ' tarea(s) de demostración · ' + rs.filter(esPendiente).length + ' pendiente(s), en curso o vencida(s).';
       if (!rs.length) { var tr=document.createElement('tr'), td=document.createElement('td'); td.colSpan=7; td.textContent='No hay resultados para esos filtros.'; tr.appendChild(td); cuerpo.appendChild(tr); return; }
       rs.forEach(function (t) {
         var tr=document.createElement('tr');
-        [t.recinto,t.encargado,t.turno + ' / ' + t.vigencia,t.tarea,t.estado,t.cierre,t.observaciones].forEach(function (valor) { var td=document.createElement('td'); td.textContent=valor || 'No registrado'; tr.appendChild(td); });
+        [t.recinto,t.puesto + ' · ' + t.encargado,t.turno + ' / ' + t.vigencia,t.tarea,t.estado,t.cierre,t.observaciones].forEach(function (valor) { var td=document.createElement('td'); td.textContent=valor || 'No registrado'; tr.appendChild(td); });
         cuerpo.appendChild(tr);
       });
     }
-    Promise.all([leerPagina('operacion-supervision.html'), leerPagina('personal-turnos.html')]).then(function (docs) {
-      var doc=docs[0], asignaciones=docs[1];
+    Promise.all([leerPagina('operacion-supervision.html'), leerPagina('personal-turnos.html'), cargarDatos()]).then(function (resultados) {
+      var doc=resultados[0], asignaciones=resultados[1], datos=resultados[2];
       var encabezado=doc.querySelector('.topbar .tit p');
       var fecha=isoFecha(encabezado && encabezado.textContent);
       var filas=doc.querySelectorAll('.contenido table')[0].rows;
@@ -3967,17 +4068,31 @@
       var tablaAsig=asignaciones.querySelectorAll('.contenido table')[0];
       if (tablaAsig) Array.prototype.forEach.call(Array.from(tablaAsig.rows).slice(1),function(f){var c=f.cells;if(c.length>=6) mapaAsignaciones[c[0].textContent.trim()]=c[5].textContent.trim();});
       var tablaTurnos=asignaciones.querySelectorAll('.contenido table')[1];
+      personal=datos.personas.filter(function (persona) { return !!persona.puesto; });
+      personal.forEach(function (persona) {
+        var opcion=document.createElement('option');
+        opcion.value=persona.puesto;
+        opcion.textContent=persona.puesto;
+        if (filtros.puesto && !Array.prototype.some.call(filtros.puesto.options,function(o){return normalizar(o.value)===normalizar(opcion.value);})) filtros.puesto.appendChild(opcion);
+      });
+      var personalRecinto=personal.filter(function (persona) { return normalizar(persona.puesto).indexOf('encargado de recinto') !== -1; });
+      if (!personalRecinto.length) throw new Error('No hay personal con puesto Encargado de Recinto en mDatosPersonales.txt.');
+      var indicePersonal=0;
       Array.prototype.forEach.call(Array.from(filas).slice(1),function(f){
         var c=f.cells;if(c.length<9||!fecha)return;
-        var recinto='Recinto '+c[2].textContent.trim(), encargado=c[4].textContent.trim(), actual=c[1].textContent.trim();
+        var recinto='Recinto '+c[2].textContent.trim(), actual=c[1].textContent.trim();
         var d=new Date(fecha+'T00:00:00'), hoy=new Date(); hoy.setHours(0,0,0,0);
         var estado=actual==='—'?(d<hoy?'vencida':'pendiente'):'completada';
+        var persona=personalRecinto[indicePersonal % personalRecinto.length];
+        indicePersonal += 1;
+        var encargado=nombreCompletoDe(persona);
         var turno='No registrado';
         if(tablaTurnos){Array.prototype.forEach.call(Array.from(tablaTurnos.rows).slice(1),function(t){var texto=t.textContent; var n=recinto.match(/\d+/); if(n&&texto.indexOf(encargado)!==-1&&contieneRecinto(texto,n[0])) turno=t.cells[1].textContent.trim()+' · '+t.cells[2].textContent.trim();});}
-        tareas.push({fecha:fecha,recinto:recinto,encargado:encargado,turno:turno,vigencia:mapaAsignaciones[recinto]||'No registrado',tarea:c[3].textContent.trim()+' — '+c[0].textContent.trim(),estado:estado,cierre:actual==='—'?'No registrado':actual,observaciones:'No registrado en la fuente de demostración'});
+        tareas.push({fecha:fecha,recinto:recinto,encargado:encargado,puesto:persona.puesto,turno:turno,vigencia:mapaAsignaciones[recinto]||'No registrado',tarea:c[3].textContent.trim()+' — '+c[0].textContent.trim(),estado:estado,cierre:actual==='—'?'No registrado':actual,observaciones:'Asignación ficticia, distribuida de forma equitativa para esta maqueta.'});
       });
+      pintarResumenPuestos();
       render();
-    }).catch(function (e) { console.warn(e); resumen.textContent='No se pudieron leer las fuentes locales de demostración. Abre el proyecto con un servidor HTTP.'; cuerpo.innerHTML='<tr><td colspan="7">No se pudieron cargar registros.</td></tr>'; });
+    }).catch(function (e) { console.warn(e); resumen.textContent='No se pudieron leer las fuentes locales de demostración. Abre el proyecto con un servidor HTTP.'; cuerpo.innerHTML='<tr><td colspan="7">No se pudieron cargar registros.</td></tr>'; if(resumenPuestos) resumenPuestos.textContent='No se pudo cargar el resumen por puesto.'; });
     Object.keys(filtros).forEach(function (k) { filtros[k].addEventListener('input',render); filtros[k].addEventListener('change',render); });
   }
   initConsultaTareasRecinto();
