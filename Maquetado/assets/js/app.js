@@ -662,19 +662,19 @@
       }
       /* Estado true pero la fecha del servidor es inferior a FecIni:
          la cuenta existe, todavía no entra en su vigencia. */
-      return { ok: false, mensaje: 'Cuenta Pendiente de Activar' };
+      return { ok: false, mensaje: 'Cuenta pendiente de activar. Contacta al administrador.' };
     }
 
     if (fechaFin && hoy > fechaFin) {
       if (cuentaActiva) {
         guardarCambioUsuario(usuario.usuario, { estado: 'false' });
-        return { ok: false, mensaje: 'Cuenta desabilitada, póngase en contacto con el administrador' };
+        return { ok: false, mensaje: 'Cuenta caducada. Contacta al administrador.' };
       }
-      return { ok: false, mensaje: 'Cuenta Caducada, póngase en contacto con el administrador' };
+      return { ok: false, mensaje: 'Cuenta caducada. Contacta al administrador.' };
     }
 
     if (!cuentaActiva) {
-      return { ok: false, mensaje: 'Cuenta desactivada, póngase en contacto con el administrador' };
+      return { ok: false, mensaje: 'Cuenta desactivada. Contacta al administrador.' };
     }
 
     return { ok: true, mensaje: '' };
@@ -716,8 +716,7 @@
     if (!registro || registro.total < MAX_INTENTOS) return '';
 
     var restante = Math.max(1, Math.ceil((VENTANA_INTENTOS - (Date.now() - registro.desde)) / 60000));
-    return 'Demasiados intentos fallidos (' + registro.total + '). Vuelve a intentarlo en ' +
-      'aproximadamente ' + restante + ' minuto(s), o solicita el restablecimiento al administrador del sistema.';
+    return 'Demasiados intentos. Inténtalo de nuevo en ' + restante + ' min.';
   }
 
   function registrarIntento(login) {
@@ -1342,7 +1341,7 @@
     var enviando = false;
     var temporizadorError = null;
 
-    function mostrarError(mensaje, detalles) {
+    function mostrarError(mensaje) {
       if (!cajaError) {
         return;
       }
@@ -1353,36 +1352,31 @@
       principal.textContent = mensaje;
       cajaError.appendChild(principal);
 
-      (detalles || []).forEach(function (detalle) {
-        var linea = document.createElement('span');
-        linea.className = 'det';
-
-        var etiqueta = document.createElement('b');
-        etiqueta.textContent = 'en el ' + detalle.campo + ': ';
-
-        linea.appendChild(etiqueta);
-        linea.appendChild(document.createTextNode(detalle.texto));
-        cajaError.appendChild(linea);
+      [campoUsuario, campoContrasena].forEach(function (campo) {
+        if (!campo) return;
+        campo.classList.add('login-input-error');
+        campo.setAttribute('aria-invalid', 'true');
       });
 
       cajaError.hidden = false;
       if (temporizadorError) window.clearTimeout(temporizadorError);
-      temporizadorError = window.setTimeout(limpiarError, 5000);
+      temporizadorError = window.setTimeout(function () { limpiarError(true); }, 5000);
     }
 
-    function limpiarError() {
+    function limpiarError(limpiarCampos) {
       if (temporizadorError) window.clearTimeout(temporizadorError);
       temporizadorError = null;
-      if (!cajaError) return;
-      cajaError.innerHTML = '';
-      cajaError.hidden = true;
+      if (cajaError) {
+        cajaError.innerHTML = '';
+        cajaError.hidden = true;
+      }
+      [campoUsuario, campoContrasena].forEach(function (campo) {
+        if (!campo) return;
+        campo.classList.remove('login-input-error');
+        campo.setAttribute('aria-invalid', 'false');
+        if (limpiarCampos) campo.value = '';
+      });
     }
-
-    [campoUsuario, campoContrasena].forEach(function (campo) {
-      if (!campo) return;
-      campo.addEventListener('input', limpiarError);
-      campo.addEventListener('change', limpiarError);
-    });
 
     if (verClave && campoContrasena) {
       verClave.addEventListener('click', function () {
@@ -1405,7 +1399,7 @@
       var contrasenaEscrita = campoContrasena.value;
 
       if (!usuarioEscrito || !contrasenaEscrita) {
-        mostrarError('Captura el login y el PassWord para poder validar el acceso al sistema.');
+        mostrarError('Completa usuario y contraseña.');
         return;
       }
 
@@ -1416,23 +1410,12 @@
         return;
       }
 
-      /* 2. Reglas de formato del login y de la contraseña. Si el formato
-            falla se muestra el motivo exacto que ya calcularon validarLogin
-            y validarPassword, en lugar del mensaje genérico. */
+      /* 2. Reglas de formato del login y de la contraseña. */
       var reglaLogin = validarLogin(usuarioEscrito);
       var reglaPassword = validarPassword(contrasenaEscrita);
 
       if (!reglaLogin.ok || !reglaPassword.ok) {
-        var detallesFormato = [];
-        if (!reglaLogin.ok) {
-          detallesFormato.push({ campo: 'Login', texto: 'Formato inválido: ' + reglaLogin.error });
-        }
-        if (!reglaPassword.ok) {
-          detallesFormato.push({ campo: 'Password', texto: 'Formato inválido: ' + reglaPassword.error });
-        }
-
-        mostrarError('login o Password, incorrecto', detallesFormato);
-        campoContrasena.value = '';
+        mostrarError('Formato incorrecto en usuario o contraseña.');
         campoContrasena.focus();
         return;
       }
@@ -1445,8 +1428,6 @@
 
       cargarDatos().then(function (datos) {
         var encontrado = null;
-        var detLogin = '';
-        var detPassword = '';
         var i;
 
         /* 3. El login debe existir previamente registrado, tal y como se escribió */
@@ -1455,10 +1436,6 @@
             encontrado = datos.usuarios[i];
             break;
           }
-        }
-
-        if (!encontrado) {
-          detLogin = 'No existe o formato incorrecto';
         }
 
         /* 4. El PassWord debe estar previamente registrado en algún registro de mUsuarios */
@@ -1470,42 +1447,20 @@
           }
         }
 
-        if (!passwordRegistrado) {
-          detPassword = 'No existe o formato incorrecto';
-        }
+        /* 5. Si falta algún dato válido, mostrar un mensaje general. Solo contar
+              intentos cuando el login existe para limitar contraseñas incorrectas. */
+        if (!encontrado || !passwordRegistrado) {
+          if (encontrado) registrarIntento(usuarioEscrito);
 
-        /* 5. Si falta alguno de los dos datos → mensaje general con el detalle que falle.
-              Cuando el login sí existe y el PassWord no corresponde, el intento
-              también cuenta para el bloqueo: si no, un ataque con contraseñas
-              inventadas nunca alcanzaría el límite. */
-        if (detLogin || detPassword) {
-          var detalles = [];
-          if (detLogin) detalles.push({ campo: 'Login', texto: detLogin });
-          if (detPassword) detalles.push({ campo: 'Password', texto: detPassword });
-
-          if (!detLogin) registrarIntento(usuarioEscrito);
-
-          mostrarError('login o Password, incorrecto', detalles);
-          campoContrasena.value = '';
+          mostrarError('Usuario o contraseña incorrectos.');
           campoContrasena.focus();
           return;
         }
 
         /* 6. Ambos existen: el PassWord debe coincidir exactamente con el registrado */
         if (encontrado.contrasena !== contrasenaEscrita) {
-          var intentos = registrarIntento(usuarioEscrito);
-          var detallesFallo = [];
-
-          /* El desconocimiento del PassWord se considera hasta la 2.ª oportunidad */
-          if (intentos >= 2) {
-            detallesFallo.push({
-              campo: 'Password',
-              texto: '(2.ª oportunidad) Si no recuerdas tu PassWord, solicita el restablecimiento al administrador del sistema.'
-            });
-          }
-
-          mostrarError('login o Password, incorrecto', detallesFallo);
-          campoContrasena.value = '';
+          registrarIntento(usuarioEscrito);
+          mostrarError('Usuario o contraseña incorrectos.');
           campoContrasena.focus();
           return;
         }
@@ -1516,7 +1471,6 @@
         var vigencia = validarVigencia(encontrado);
         if (!vigencia.ok) {
           mostrarError(vigencia.mensaje);
-          campoContrasena.value = '';
           campoContrasena.focus();
           return;
         }
@@ -1524,8 +1478,7 @@
         var persona = datos.mapaPersonas[encontrado.idPersona];
 
         if (!persona) {
-          mostrarError('El usuario "' + encontrado.usuario + '" no tiene una persona asociada en mDatosPersonales.txt. Agrega el id_persona del usuario y vuelve a intentarlo.');
-          campoContrasena.value = '';
+          mostrarError('No se encontró el perfil asociado a esta cuenta.');
           campoContrasena.focus();
           return;
         }
@@ -1542,7 +1495,7 @@
         window.location.href = 'inicio.html';
       }).catch(function (error) {
         console.error(error);
-        mostrarError('No se pudieron leer mDatosPersonales.txt y mUsuarios.txt. Abre el proyecto con un servidor local (Live Server o "python -m http.server") e inténtalo de nuevo.');
+        mostrarError('No se pudo validar el acceso. Inténtalo de nuevo.');
       }).then(function () {
         enviando = false;
         if (botonLogin) {
